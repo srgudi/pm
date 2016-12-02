@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="taskPaymentType" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="19"/>
+	<parameter name="addressLine" class="java.lang.String"/>
+	<parameter name="city" class="java.lang.String"/>
+	<parameter name="postalCode" class="java.lang.String"/>
+	<parameter name="From" class="java.sql.Timestamp"/>
+	<parameter name="To" class="java.sql.Timestamp"/>
+	<parameter name="pmtType" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select party.name as clientStaff,practicetype.name as task,task.filing_title, task.amount_paid as amtPaid, task.chq_no as chequeNo, task.ack_no as ackNo,
+task.due_date, task.firm_id, pt.type as pmtName
+from task as task, tax_application_practice_type as practiceType, party as party, payment_type as pt
+where practiceType.id = task.partice_id
+and pt.id = task.payment_id
+and party.party_id = task.client_staff_in_charge
+and task.payment_id = $P{pmtType}
+and task.due_date
+BETWEEN $P{From} AND $P{To}]]>
+	</queryString>
+	<field name="clientStaff" class="java.lang.String"/>
+	<field name="task" class="java.lang.String"/>
+	<field name="filing_title" class="java.lang.String"/>
+	<field name="amtPaid" class="java.lang.Integer"/>
+	<field name="chequeNo" class="java.lang.String"/>
+	<field name="ackNo" class="java.lang.String"/>
+	<field name="due_date" class="java.sql.Timestamp"/>
+	<field name="firm_id" class="java.math.BigInteger"/>
+	<field name="pmtName" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="175" splitType="Stretch">
+			<image>
+				<reportElement x="32" y="13" width="180" height="58"/>
+				<imageExpression><![CDATA["/logo/logo.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="32" y="72" width="180" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{addressLine}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="87" width="180" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{city}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="102" width="180" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{postalCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="321" y="13" width="229" height="36"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Task Payment Type]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="111" y="155" width="316" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pmtName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="32" y="155" width="78" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Payment Type:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="32" y="7" width="78" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Client Staff]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="7" width="78" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Task]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="7" width="85" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Filing Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="273" y="7" width="64" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DueDate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="337" y="7" width="76" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Paid Amount ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="413" y="7" width="72" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cheque No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="485" y="7" width="70" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ack No]]></text>
+			</staticText>
+			<line>
+				<reportElement x="32" y="23" width="46" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="110" y="23" width="43" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="188" y="23" width="58" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="273" y="23" width="41" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="337" y="23" width="50" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="413" y="23" width="50" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="485" y="23" width="50" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="110" y="1" width="78" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clientStaff}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="1" width="84" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{filing_title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="1" width="76" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amtPaid}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="413" y="1" width="72" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chequeNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="485" y="1" width="70" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ackNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="273" y="1" width="37" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{due_date}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="32" y="1" width="78" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{task}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

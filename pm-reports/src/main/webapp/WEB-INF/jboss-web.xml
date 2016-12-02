@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>reports</context-root>
+</jboss-web>

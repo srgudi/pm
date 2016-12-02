@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClientListByPartnerIncharge" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PartnerInCharge" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct party.`party_id`, rel.`subject`, rel.`object`, org.`party_id` as party_id_4,
+  org.`name` as name, codename.`id`, codename.`long_description`, code1.`id` as id_8,
+  code1.`long_description` as long_description_9, incharge.`party_id` as party_id_10, incharge.`name` as name_11,
+org.in_charge_person as in_charge_person
+  from `party` as party, `party_relationship` as rel,
+      `organization` as org, `code` as codename,
+       `code` as code1, `party` as incharge
+  where  party.party_id = rel.object and rel.subject = org.party_id
+    and org.organization_type = 2 and org.form_of_business = codename.id
+    and org.industry_type = code1.id
+		and org.in_charge_person = $P{PartnerInCharge}]]>
+	</queryString>
+	<field name="party_id" class="java.math.BigInteger"/>
+	<field name="subject" class="java.math.BigInteger"/>
+	<field name="object" class="java.math.BigInteger"/>
+	<field name="party_id_4" class="java.math.BigInteger"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="id" class="java.math.BigInteger"/>
+	<field name="long_description" class="java.lang.String"/>
+	<field name="id_8" class="java.math.BigInteger"/>
+	<field name="long_description_9" class="java.lang.String"/>
+	<field name="party_id_10" class="java.math.BigInteger"/>
+	<field name="name_11" class="java.lang.String"/>
+	<field name="in_charge_person" class="java.math.BigInteger"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement x="44" y="14" width="300" height="29" forecolor="#339900"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Client List By Person Incharge]]></text>
+			</staticText>
+			<image>
+				<reportElement x="327" y="4" width="225" height="58"/>
+				<imageExpression><![CDATA["\\logo\\logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="44" y="12" width="100" height="20" forecolor="#FFFFFF" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="144" y="12" width="100" height="20" forecolor="#FFFFFF" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Client Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="244" y="12" width="100" height="20" forecolor="#FFFFFF" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Form of Business]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="344" y="12" width="118" height="20" forecolor="#FFFFFF" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Industry Type]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="44" y="0" width="100" height="20" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{party_id}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="144" y="0" width="100" height="20" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="244" y="0" width="100" height="20" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{long_description}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="344" y="0" width="118" height="20" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{long_description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

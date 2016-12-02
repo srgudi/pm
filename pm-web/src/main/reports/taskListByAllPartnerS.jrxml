@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="taskListByAllPartnerS" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="From" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="To" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SortBy" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="addressLine" class="java.lang.String"/>
+	<parameter name="city" class="java.lang.String"/>
+	<parameter name="postalCode" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select task.`id`, task.`staff_in_charge`, task.`partner_in_charge`,
+  task.`client_staff_in_charge`, task.`due_date`, party.`name` as PName,
+  party.`party_id`, task.`filing_type`,task.filing_title as filingTitle, partner.`name` as PRName, task.`firm_id`,
+  client.name as CName, staff.name as SName,tax_application_practice_type.name as TName,task.filing_title
+  from `task` as task, `party` as party,
+       `party` as partner,`party` as client,
+       `party` as staff,tax_application_practice_type
+  where task.firm_id = party.party_id and task.partner_in_charge = partner.party_id
+    and task.client_staff_in_charge = client.party_id
+    and task.staff_in_charge = staff.party_id and tax_application_practice_type.id=task.partice_id
+and task.`due_date`
+Between $P{From} and $P{To} order by $P!{SortBy}]]>
+	</queryString>
+	<field name="id" class="java.math.BigInteger"/>
+	<field name="staff_in_charge" class="java.math.BigInteger"/>
+	<field name="partner_in_charge" class="java.math.BigInteger"/>
+	<field name="client_staff_in_charge" class="java.math.BigInteger"/>
+	<field name="due_date" class="java.sql.Timestamp"/>
+	<field name="PName" class="java.lang.String"/>
+	<field name="party_id" class="java.math.BigInteger"/>
+	<field name="filing_type" class="java.lang.Integer"/>
+	<field name="filingTitle" class="java.lang.String"/>
+	<field name="PRName" class="java.lang.String"/>
+	<field name="firm_id" class="java.math.BigInteger"/>
+	<field name="CName" class="java.lang.String"/>
+	<field name="SName" class="java.lang.String"/>
+	<field name="TName" class="java.lang.String"/>
+	<field name="filing_title" class="java.lang.String"/>
+	<group name="Group1">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/15)]]></groupExpression>
+		<groupHeader>
+			<band height="55"/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/5)]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="127" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="99" width="191" height="15"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{postalCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="11" y="69" width="191" height="15"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{addressLine}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="336" y="10" width="188" height="35" isPrintWhenDetailOverflows="true" forecolor="#000000"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Task List By Partner]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="11" y="84" width="191" height="15"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{city}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="10" y="10" width="191" height="58"/>
+				<imageExpression><![CDATA["/logo/logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="79" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

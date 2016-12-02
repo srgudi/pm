@@ -1,0 +1,204 @@
+.headerCap {
+	background: -moz-linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #BFE3FE), color-stop(100%, #00477D)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* Opera 11.10+ */
+	background: linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* W3C */
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom:2px solid #00477D;
+	height:24px;
+	width:auto;
+	position:relative;
+	margin-top:10px;
+	color:#FFFFFF;
+	font-size:1.4em;
+	font-weight:bold;
+	font-family: "Arimo", "Helvetica Neue", Arial, Helvetica, sans-serif;
+	padding:5px 0px 0px 55px;
+}
+.menuCap {
+	background: -moz-linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #BFE3FE), color-stop(100%, #00477D)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* Opera 11.10+ */
+	background: linear-gradient(top, #BFE3FE 0%, #00477D 100%); /* W3C */
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom:2px solid #00477D;
+	height:24px;
+	position:relative;
+	margin-top:10px;
+	color:#FFFFFF;
+	font-size:14px;
+	font-weight:bold;
+	padding:5px 0px 0px 55px;
+	display:block;
+}
+.yui3-u-1-6 {
+	width:15%;
+}
+.yui3-u, .yui3-u-1, .yui3-u-1-2, .yui3-u-1-3, .yui3-u-2-3, .yui3-u-1-4, .yui3-u-3-4, .yui3-u-1-5, .yui3-u-2-5, .yui3-u-3-5, .yui3-u-4-5, .yui3-u-1-6, .yui3-u-5-6, .yui3-u-1-8, .yui3-u-3-8, .yui3-u-5-8, .yui3-u-7-8, .yui3-u-1-12, .yui3-u-5-12, .yui3-u-7-12, .yui3-u-11-12, .yui3-u-1-24, .yui3-u-5-24, .yui3-u-7-24, .yui3-u-11-24, .yui3-u-13-24, .yui3-u-17-24, .yui3-u-19-24, .yui3-u-23-24 {
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	letter-spacing:normal;
+	word-spacing:normal;
+	vertical-align:top;
+	margin-left: 1px;
+	margin-top: 2px;
+	
+}
+.yui3-u-19-24 {
+	width:83%;
+	margin-left:5px;
+}
+.gridWrap {
+ border-top:2px solid #95140e;
+ padding:0px 0px 0px 0px;
+}
+.container_12 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 900px;
+}
+.mt15 { margin-top: 10px; }
+.mb15 { margin-bottom: 15px; }
+/* Dropdown Menu Style */
+.HeadMenuBar {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+.HeadMenuBar li {
+	float:right;
+	display:block;
+	position:relative;
+	z-index:500;
+	margin:0 1px;
+}
+/* this is the parent menu */
+.HeadMenuBar li a {
+	text-decoration:none;
+}
+.HeadMenuBar li a:hover {
+	color:#fff;
+}
+/* you can make a different style for default selected value */
+.HeadMenuBar a.selected {
+	color:#f00;
+}
+/* submenu, it's hidden by default */
+.HeadMenuBar ul {
+	position:absolute;
+	left:0;
+	top:32px;
+	display:none;
+	margin:0 0 0 -1px;
+	padding:0;
+	list-style:none;
+}
+.HeadMenuBar ul li {
+	width:100px;
+	float:left;
+	border-top:1px solid #fff;
+}
+/* display block will make the link fill the whole area of LI */
+.HeadMenuBar ul a {
+	display:block;
+	height:15px;
+	padding: 0px 5px 10px 5px;
+	color:#464646;
+	width:140px;
+	font-size:11px;
+	background: -moz-linear-gradient(top, #b7b7b7 0%, #d6d6d6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b7b7b7), color-stop(100%, #d6d6d6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #b7b7b7 0%, #d6d6d6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #b7b7b7 0%, #d6d6d6 100%); /* Opera 11.10+ */
+	background: linear-gradient(top, #b7b7b7 0%, #d6d6d6 100%); /* W3C */
+	border-radius:0;
+	margin:0;
+	border:1px solid #666;
+}
+.HeadMenuBar ul a:hover {
+	text-decoration:underline;
+	color:#ffffff;
+	background: -moz-linear-gradient(top, #989898 0%, #b0b0b0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #989898), color-stop(100%, #b0b0b0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #989898 0%, #b0b0b0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #989898 0%, #b0b0b0 100%); /* Opera 11.10+ */
+	background: linear-gradient(top, #989898 0%, #b0b0b0 100%); /* W3C */
+}
+#nav-basic a#nav-basic-logout {
+    float: right;
+    padding: 12px 14px 12px 0px;
+    font-size: 12px;
+    color: #555;
+    text-decoration: none;
+}
+
+#nav-basic a#nav-basic-logout span {
+    margin-top: 1px;
+    display: block;
+    float: left;
+    cursor: pointer;
+}
+
+#nav-basic .nav-basic-logout-img {
+    float: left;
+    display: block;
+    margin-right: 6px;
+}
+
+#yui-g
+{
+	border:0px solid red;
+	float:right;
+	background-color:#f5f5f5;
+	text-align:right;
+	margin-right:2px;
+	margin-top:2px;
+	border-radius: 0px 0px 0px 0px;
+	border-left: 1px solid #E3E3E3;
+}
+
+#listcontainer  //parent of yui-g
+{
+	top-margin:0px;
+	border: 1px #cccccc;
+	align:left;
+	-moz-border-radius: 0px 0px 15px 15px;
+	-webkit-border-radius: 0px 0px 15px 15px;
+	border-radius: 0px 0px 15px 15px;
+}
+
+.reducedBottom{
+	margin-bottom: 00px;
+}
+
+.reportLeftMargin{
+	margin-left: 120px;
+}
+.reportTopMargin{
+	margin-top: 100px;
+}
+.reportContainer{
+	margin-top: 50px; 
+	margin-right: 100px;
+    margin-left: 100px;
+}
+.reportDetails{
+	 margin-left: 100px;
+	  margin-right: 100px;
+}
+.icon-chevron-right { 
+    background-position: 14px 14px;
+}

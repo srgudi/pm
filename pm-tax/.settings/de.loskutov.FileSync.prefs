@@ -1,0 +1,8 @@
+#Sun Feb 13 17:22:54 CST 2011
+WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
+defaultDestination=\:PM-TRUNK/pm-web/target/pm.war/WEB-INF/classes
+defaultVariables=
+eclipse.preferences.version=1
+includeTeamPrivateFiles=false
+map|0=target/classes|,|,|,|,
+useCurrentDateForDestinationFiles=false

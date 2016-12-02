@@ -1,0 +1,224 @@
+/* float clearing for IE6 */
+* html .clearfix{ 
+  height: 1%;
+  overflow: visible;
+}
+
+/* float clearing for IE7 */
+*+html .clearfix{
+  min-height: 1%;
+}
+
+/* float clearing for everyone else */
+.clearfix:after{
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+}
+
+.notificationInfo {
+	margin:10px 0px 10px 0px; 	
+	padding:0px !important;
+	*overflow:hidden;
+	width:900px;
+}
+
+.notfTop, .notfTopInner, .notfBottom, .notfBottomInner {
+	font-size:1px;
+	height:9px;
+	background-image:url(../images/notification_sprites_img.gif);
+	background-repeat:no-repeat;
+	background-color:#fff;
+}
+
+.notfTop {
+	padding: 0 0 0 11px;
+	background-position:0 0;
+}
+
+.notfTopInner {
+	background-position:right top;
+}
+
+.notfBottom {
+	padding: 0 0 0 11px;
+	background-position:left bottom;
+}
+
+.notfBottomInner {
+	background-position:right bottom;
+}
+
+.notfCenter{
+	background-color:#f7cb33;
+	padding:0px 13px;
+	_height:100%;	
+}	
+
+.notfContent {
+	background-image:url(../images/notf_Icon.gif);
+	background-repeat:no-repeat;
+	background-position:0 0;
+	padding:0px 0px 0px 50px;
+	min-height:28px;
+	height:expression(this.scrollHeight<28?"28px":"auto");
+}
+
+.notfContent p{	
+	padding:7px 0px 7px 0px;
+	margin:0px 36px 0px 0px;	
+}
+
+.notfline {
+	background-image:url(../images/notfline.gif);
+	background-position:left bottom;
+	background-repeat:repeat-x;
+}
+
+.notfHeader {
+	font-weight:bold;
+}
+
+.notfHighlighter {
+	font-weight:bold;
+	color:#1086d9;
+	cursor:pointer;
+}
+
+.notfRelative {
+	position:relative;	
+}
+
+/*success message starts*/
+.successMsgBox {
+	margin:10px 0px 10px 0px; 	
+	padding:0px !important;
+	*overflow:hidden;
+	width:900px;
+}
+
+.successMsgBoxTop, .successMsgBoxTopInner, .successMsgBoxBottom, .successMsgBoxBottomInner {
+	font-size:1px;
+	height:9px;
+	background-image:url(../images/successMsgBox.png);
+	background-repeat:no-repeat;
+	background-color:#fff;
+}
+
+.successMsgBoxTop {
+	padding: 0px 0px 0px 11px;
+	background-position:0px 0px;
+}
+
+.successMsgBoxTopInner {
+	background-position:right top;
+}
+
+.successMsgBoxBottom {
+	padding: 0px 0px 0px 11px;
+	background-position:left bottom;
+}
+
+.successMsgBoxBottomInner {
+	background-position:right bottom;
+}
+
+.successMsgBoxCenter{
+	background-color:#d1f0b2;
+	padding:0px 13px;
+	_height:100%;	
+	color:#336600;	
+}	
+
+.successMsgBoxContent {
+	background-image:url(../images/info_icn_sucess.gif);
+	background-repeat:no-repeat;
+	background-position:0 0;
+	padding:0px 0px 0px 50px;
+	min-height:28px;
+	height:expression(this.scrollHeight<28?"28px":"auto");
+}
+
+.successMsgBoxContent p{	
+	padding:7px 0px 7px 0px;
+	margin:0px 36px 0px 0px;	
+}
+
+.successMsgBoxHeader {
+	font-weight:bold;
+}
+
+.successMsgBoxRelative {
+	position:relative;	
+}
+/*success message ends*/
+
+
+/*error message starts*/
+
+.errorMsgBox {
+	margin:10px 0px 10px 0px; 	
+	padding:0px !important;
+	*overflow:hidden;
+	width:900px;
+}
+
+.errorMsgBoxTop, .errorMsgBoxTopInner, .errorMsgBoxBottom, .errorMsgBoxBottomInner {
+	font-size:1px;
+	height:9px;
+	background-image:url(../images/errorMessage.gif);
+	background-repeat:no-repeat;
+	background-color:#fff;
+}
+
+.errorMsgBoxTop {
+	padding: 0px 0px 0px 11px;
+	background-position:0px 0px;
+}
+
+.errorMsgBoxTopInner {
+	background-position:right top;
+}
+
+.errorMsgBoxBottom {
+	padding: 0px 0px 0px 11px;
+	background-position:left bottom;
+}
+
+.errorMsgBoxBottomInner {
+	background-position:right bottom;
+}
+
+.errorMsgBoxCenter{
+	background-color:#F2B2B3;
+	padding:0px 13px;
+	_height:100%;	
+	color:#9A2A0A;	
+	font-weight:bold;
+}	
+
+.errorMsgBoxContent {
+	background-image:url(../images/errorIcon.gif);
+	background-repeat:no-repeat;
+	background-position:0 0;
+	padding:0px 0px 0px 50px;
+	min-height:28px;
+	height:expression(this.scrollHeight<28?"28px":"auto");
+}
+
+.errorMsgBoxContent p{	
+	padding:7px 0px 7px 0px;
+	margin:0px 36px 0px 0px;	
+}
+
+.errorMsgBoxHeader {
+	font-weight:bold;
+}
+
+.errorMsgBoxRelative {
+	position:relative;	
+}
+/*error message ends*/

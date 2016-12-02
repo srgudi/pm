@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 
+		Declare Spring's View Resolvers for Jasper
+		
+		Based on the bean names we can infer that:
+			* pdfReport is for generating PDFs
+			* xlsReport is for Excel format reports
+			* htmlReport is for HTML reports
+			* csvReport is for CSV reports
+	-->
+	<!-- 
+		id: the name to be used as a reference in the controller
+		url: the path where the Jasper jasper file is located
+		reportDateKey: the name of the datasource. This is passed by the controller
+	-->
+	<bean id="pdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/ClientListWithDetails.jasper" /> 
+
+	<bean id="xlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/ClientListWithDetails.jasper" />
+	
+	<bean id="htmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/ClientListWithDetails.jasper" />
+
+<bean id="superPdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/clientListWithDetailsS.jasper" /> 
+
+	<bean id="superxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/clientListWithDetailsS.jasper" />
+	
+	<bean id="superhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/ClientListWithDetails.jasper" />	
+
+		
+	<bean id="businesspdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/ClientListByBusinessType.jasper" /> 
+
+	  <bean id="businessxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/ClientListByBusinessType.jasper" />
+	
+	  <bean id="businesshtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/ClientListByBusinessType.jasper" /> 
+		
+		
+	<bean id="firmpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/ClientListByFirmreport.jasper" /> 
+
+	  <bean id="firmxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/ClientListByFirmreport.jasper" />
+	
+	  <bean id="firmhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/ClientListByFirmreport.jasper" /> 
+		
+		
+		<bean id="taskftpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/taskListByFilingTypeJ.jasper" /> 
+
+	  <bean id="taskftxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/taskListByFilingTypeJ.jasper" />
+	
+	  <bean id="taskfthtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/taskListByFilingTypeJ.jasper" /> 
+		
+		<bean id="taskftAllpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/taskListByAllFilingTypeJ.jasper" /> 
+
+	  <bean id="taskftAllxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/taskListByAllFilingTypeJ.jasper" />
+	
+	  <bean id="taskftAllhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/taskListByAllFilingTypeJ.jasper" />
+		
+		<bean id="taskbyfirmpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/TaskListByFirm.jasper" /> 
+
+	  <bean id="taskbyfirmxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/TaskListByFirm.jasper" />
+	
+	  <bean id="taskbyfirmhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/TaskListByFirm.jasper" /> 
+		
+		<bean id="taskbyemppdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/TaskListByEmployee.jasper" /> 
+
+	  <bean id="taskbyempxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/TaskListByEmployee.jasper" />
+	
+	  <bean id="taskbyemphtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/TaskListByEmployee.jasper" /> 
+		
+	 <bean id="taskbyempAllpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/taskListByAllEmployee.jasper" /> 
+		
+	<bean id="taskbyempAllxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/taskListByAllEmployee.jasper" /> 
+		
+		<bean id="taskbystatuspdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/taskListByStatus.jasper" /> 
+
+	  <bean id="taskbystatusxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/taskListByStatus.jasper" />
+	
+	  <bean id="taskbystatushtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/taskListByStatus.jasper" />
+		
+		<bean id="taskbystatusAllpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/taskListByAllStatus.jasper" /> 
+
+	  <bean id="taskbystatusAllxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/taskListByAllStatus.jasper" />
+	
+	  <bean id="taskbystatusAllhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/taskListByAllStatus.jasper" />
+		
+		<bean id="workLoadsummarypdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/workLoadSummary.jasper" /> 
+
+	  <bean id="workLoadsummaryxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/workLoadSummary.jasper" />
+	
+	  <bean id="workLoadsummaryhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/workLoadSummary.jasper" /> 
+		
+		<bean id="dueDatepdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/DueDateByTask.jasper" /> 
+
+	  <bean id="dueDatexlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/DueDateByTask.jasper" />
+	
+	  <bean id="dueDatehtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/DueDateByTask.jasper" />
+		
+		<bean id="dueDateAllpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/DueDateByTaskAll.jasper" /> 
+
+	  <bean id="dueDateAllxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/DueDateByTaskAll.jasper" />
+	
+	  <bean id="dueDateAllhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/DueDateByTaskAll.jasper" />
+		
+	<bean id="MDLpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/ClientListByMDL.jasper" /> 
+
+	  <bean id="MDLxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/ClientListByMDL.jasper" />
+	
+	  <bean id="MDLhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/ClientListByMDL.jasper" />
+		
+		<bean id="FilingspdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/FilingByClient.jasper" /> 
+
+	  <bean id="FilingsxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/FilingByClient.jasper" />
+	
+	  <bean id="FilingshtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/FilingByClient.jasper" />
+		
+		
+		<bean id="clientListpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/ClientListByPartnerIncharge.jasper" /> 
+
+	  <bean id="clientListxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/ClientListByPartnerIncharge.jasper" />
+	
+	  <bean id="clientListhtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/ClientListByPartnerIncharge.jasper" />
+		
+		
+		<bean id="taskDueDatepdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/TaskListDueDate.jasper" /> 
+
+	  <bean id="taskDueDatedueDatexlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/TaskListDueDate.jasper" />
+	
+	  <bean id="taskDueDatehtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/TaskListDueDate.jasper" />
+		
+		<bean id="taskModulepdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/TaskListByPartner.jasper" /> 
+
+	  <bean id="taskModulexlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/TaskListByPartner.jasper" />
+	
+	  <bean id="taskModulehtmlReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsHtmlView"
+		p:url="classpath:reports/TaskListByPartner.jasper" />
+		
+		<bean id="taskModuleAllpdfReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView"
+		p:url="classpath:reports/taskListByAllPartner.jasper" />
+		
+		<bean id="taskModuleAllxlsReport"
+	   class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView"
+		p:url="classpath:reports/taskListByAllPartner.jasper" />
+		
+</beans>

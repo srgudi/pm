@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.2">
+
+   <!-- By not specifying the 'clustering' element, the cache runs in LOCAL mode. -->
+   <!-- Configure the TransactionManager -->
+   <transaction transactionManagerLookupClass="org.jboss.cache.transaction.GenericTransactionManagerLookup"/>
+   <!--<region name="/captcha">
+         <attribute name="maxNodes">5000</attribute>
+         <attribute name="timeToLiveSeconds">0</attribute>
+         <attribute name="maxAgeSeconds">120</attribute>
+       </region>
+       
+-->
+<!--<attribute name="NodeLockingScheme">PESSIMISTIC</attribute>
+<attribute name="IsolationLevel">REPEATABLE_READ</attribute>
+<attribute name="LockParentForChildInsertRemove">false</attribute>
+<attribute name="CacheMode">REPL_SYNC</attribute>
+
+--><!--<attribute name="policyClass">org.jboss.cache.eviction.LRUPolicy</attribute>
+--></jbosscache>

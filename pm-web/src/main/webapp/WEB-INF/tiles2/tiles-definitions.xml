@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+	<!-- Default Main Template -->
+	<definition name=".mainPMTemplate" template="/WEB-INF/tiles2/layout/PM-LAYOUT.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		<put-attribute name="html-header"
+			value="/WEB-INF/tiles2/layout/PM-HTML-HEADER.jsp" />
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/PM-BANNER.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/tiles2/layout/PM-MENU.jsp" />
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/PM-BODY.jsp" />
+	</definition>
+	
+	<definition name=".tablessPMTemplate" template="/WEB-INF/tiles2/layout/TABLESS-LAYOUT.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		<put-attribute name="html-header"
+			value="/WEB-INF/tiles2/layout/PM-HTML-HEADER.jsp" />
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/PM-BANNER.jsp" />		
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/PM-BODY.jsp" />
+	</definition>
+	
+<definition name=".mobiletablessPMTemplate" template="/WEB-INF/tiles2/layout/MOBILE-LAYOUT.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/MOBILE-BANNER.jsp" />		
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/MOBILE-BODY.jsp" />
+	</definition> 
+	
+	<definition name=".mobiletabPMTemplate" template="/WEB-INF/tiles2/layout/MOBILE-TABLAYOUT.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/MOBILE-BANNER.jsp" />		
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/MOBILE-BODY.jsp" />
+	</definition> 
+	
+	<definition name=".mobileClientSubMenuPMTemplate" template="/WEB-INF/tiles2/layout/MOBILE-CLIENT-SUBMENU.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/MOBILE-BANNER.jsp" />		
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/MOBILE-BODY.jsp" />
+	</definition> 
+	
+	<definition name=".mobileAdminSubMenuPMTemplate" template="/WEB-INF/tiles2/layout/MOBILE-ADMIN-SUBMENU.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/MOBILE-BANNER.jsp" />		
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/MOBILE-BODY.jsp" />
+	</definition> 
+	
+	<definition name=".mobileFirmAdminSubMenuPMTemplate" template="/WEB-INF/tiles2/layout/MOBILE-FIRMADMIN-SUBMENU.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/MOBILE-BANNER.jsp" />		
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/MOBILE-BODY.jsp" />
+	</definition> 
+     
+     
+    <!-- Change Password -->
+	<definition name="changePassword.tilesView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/user/changePassword.jsp" />
+	</definition>
+	
+	<!-- User Profile -->
+	<definition name="userProfile.tilesView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/user/userProfile.jsp" />
+	</definition>
+    
+     <!-- Reset Password -->
+     <definition name="receivePassword.tilesView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/user/receivePassword.jsp" />
+	</definition>
+	
+	<!-- Forgot Password -->
+     <definition name="forgotPassword.tilesView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/user/forgotPassword.jsp" />
+	</definition>
+	
+	<definition name="clientList.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientList.jsp" />
+	</definition>
+
+	<definition name="clientDetail.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientDetail.jsp" />
+
+	</definition>
+
+	<definition name="clientLawyer.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientLawyer.jsp" />
+	</definition>
+
+	<definition name="clientBank.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientBank.jsp" />
+	</definition>
+	
+	<!-- <definition name="mobileClientBank.tilesView" extends=".mobiletabPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientBank.jsp" />
+	</definition> -->
+	
+	<definition name="mobileClientInsurance.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientInsurance.jsp" />
+	</definition>
+	
+	<definition name="clientLawyerMobile.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileclientlawyers.jsp" />
+	</definition>
+	
+	<definition name="clientTransferAgentMobile.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientTransferAgent.jsp" />
+	</definition>
+	
+	<definition name="clientTransferAgent.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientTransferAgent.jsp" />
+	</definition>
+
+	<definition name="clientInsurance.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientInsurance.jsp" />
+	</definition>
+
+	<definition name="clientLocation.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientLocation.jsp" />
+	</definition>
+
+	<definition name="clientStaff.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientStaff.jsp" />
+	</definition>
+
+	<definition name="clientOfficersAndShareHolders.tilesView"
+		extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientOfficersAndShareHolders.jsp" />
+	</definition>
+	
+	<definition name="clientDocuments.tilesView"
+		extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/clientDocuments.jsp" />
+	</definition>
+	
+	<definition name="clientDocumentsSearch.tilesView"
+		extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/client/documentSearch.jsp" />
+	</definition>
+
+	<!-- TASK LIST JSP -->
+
+	<definition name="taskList.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/task/taskList.jsp" />
+	</definition>
+
+	 <definition name="taskModule.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/task/taskModule.jsp" />
+	</definition>
+	
+	<definition name="taskDocuments.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/task/taskDocumentsUpload.jsp" />
+	</definition>
+	
+	<definition name="taskDocumentSearch.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/task/taskDocumentsSearch.jsp" />
+	</definition>
+	
+	<!-- DASH BOARD JSP -->
+
+	<definition name="dashboard.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/dashboard/dashboard.jsp" />
+	</definition>
+	
+
+
+	<!-- TAX LIST JSP -->
+
+	<definition name="taxModule.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/tax/taxModule.jsp" />
+	</definition>
+
+	<!-- Firm Administration -->
+
+	<definition name="manageTaxModule.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/firmadmin/manageTaxModule.jsp" />
+	</definition>
+
+	<definition name="managePartyCode.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/firmadmin/managePartyCode.jsp" />
+	</definition>
+
+	<definition name="manageFirmStaff.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/firmadmin/manageFirmStaff.jsp" />
+	</definition>
+
+	<!-- Application Administration -->
+
+	<definition name="adminTimezone.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminTimezone.jsp" />
+	</definition>
+
+
+	<definition name="adminJurisdiction.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminJurisdiction.jsp" />
+	</definition>
+
+	<definition name="adminCodeType.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminCodeType.jsp" />
+	</definition>
+
+	<definition name="adminCode.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminCode.jsp" />
+	</definition>
+	
+	<definition name="adminTaskNotificationTemplate.tilesView"
+		extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminTaskNotificationTemplate.jsp" />
+	</definition>
+
+	<definition name="adminTaskNotificationRecipient.tilesView"
+		extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminTaskNotificationRecipient.jsp" />
+	</definition>
+
+	<definition name="adminFirmModule.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminFirmModule.jsp" />
+	</definition>
+
+	<definition name="adminFirmEmployee.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/appadmin/adminFirmEmployee.jsp" />
+	</definition>
+
+
+	<!-- Calendar -->
+
+	<definition name="calendar.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/calendar/calendar.jsp" />
+	</definition>
+	
+	<definition name="calendarMobile.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileCalendar/mobilecalendar.jsp" />
+	</definition>
+	
+	<definition name="userProfileMobile.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileuser/mobileuserprofile.jsp" />
+	</definition>
+	
+	<definition name="searchDocument.tilesView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/document/searchDocument.jsp" />
+	</definition>
+
+	<definition name="*/*" extends=".mainPMTemplate">
+		<put-attribute name="body" value="/WEB-INF/tiles2/pages/{1}/{2}.jsp" />
+	</definition>
+
+	<!-- Report -->
+
+	<definition name="report.indexView" extends=".mainPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/index.jsp" />
+	</definition>
+
+	<definition name=".mainPMREPTemplate" template="/WEB-INF/tiles2/layout/PM-LAYOUT.jsp">
+		<put-attribute name="title" value="PM - Practice Management "
+			type="string" />
+		<put-attribute name="html-header"
+			value="/WEB-INF/tiles2/layout/PM-HTML-HEADER.jsp" />
+		<put-attribute name="banner"
+			value="/WEB-INF/tiles2/layout/PM-BANNER.jsp" />
+		<put-attribute name="body" value="/WEB-INF/tiles2/layout/PM-BODY.jsp" />
+	</definition>
+
+	<definition name="report.taskView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskModuleReport.jsp" />
+	</definition>
+	
+	<definition name="report.taskViewJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskModuleJasperReport.jsp" />
+	</definition>
+
+	<definition name="report.dueDateView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/dueDatebytaskReport.jsp" />
+	</definition>
+
+	<definition name="report.taskbyDueDateView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskByDueDateReport.jsp" />
+	</definition>
+	
+	<definition name="report.taskbyDueDateViewJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskByDueDateJasperReport1.jsp" />
+	</definition>
+
+	<definition name="report.taskbyFirmView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByFirmReport.jsp" />
+	</definition>
+
+     <definition name="report.taskbyFirmViewJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByFirmJasper.jsp" />
+	</definition>
+	
+	<definition name="report.taskbyEmpView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByEmpReport.jsp" />
+	</definition>
+	
+	<definition name="report.taskbyEmpViewJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByEmpJasperReport.jsp" />
+	</definition>
+
+	<definition name="report.clientbyFirmView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientListByFirmReport.jsp" />
+	</definition> 
+	
+	<definition name="report.clientByFirmJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientByFirmJasperReport.jsp" />
+	</definition>
+
+	<definition name="report.taskbyFilingView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByFilingTypeReport.jsp" />
+	</definition>
+	
+	<definition name="report.taskbyFilingViewJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByFilingTypeJasperReport.jsp" />
+	</definition>
+
+	<definition name="report.taskbyStatusView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByStatusReport.jsp" />
+	</definition>
+	
+	<definition name="report.taskbyStatusViewJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/taskListByStatusJasperReport.jsp" />
+	</definition>
+	
+	<definition name="report.clientwithDetailsView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientListwithDetailsReport.jsp" />
+	</definition>
+	
+	<definition name="report.clientListwithDetailsJasperView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientListwithDetailsJasperReport.jsp" />
+	</definition>
+	
+	<definition name="report.clientListbypartnerView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientListByPartnerReport.jsp" />
+	</definition>
+	
+	<definition name="report.clientListbypartnerJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientListByPartnerJasperReport.jsp" />
+	</definition>
+
+	<definition name="report.newtaxListbyStaffView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/newTaxListByStaffReport.jsp" />
+	</definition>
+	
+	<definition name="report.newtaxListbyStaffViewJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/newTaxListByStaffJasperReport.jsp" />
+	</definition>
+	
+	<definition name="report.filingByClientView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/filingsByClientReport.jsp" />
+	</definition>
+	
+	<definition name="report.filingByClientJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/filingsByClientJasperReport.jsp" />
+	</definition>
+	
+	<definition name="report.clientListByMDLView" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientListByMisDeadLinesReport.jsp" />
+	</definition>
+	
+	<definition name="report.dueDateByTaskJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/dueDatebytaskJasperReport.jsp" />
+	</definition>
+	
+	<definition name="report.clientListByMDLJasper" extends=".tablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/reports/clientListByMisDeadLinesJasperReport.jsp" />
+	</definition>
+	
+         <!--   Mobile Version -->
+         
+	 <definition name="mobileHome.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/home/home.jsp" />
+	</definition> 
+	
+	 <definition name="mobileFirmAdminHome.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobilefirmadmin/firmadminhome.jsp" />
+	</definition>
+	
+	<definition name="mobiletaskList.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobiletask/mobileTaskList.jsp" />
+	</definition>
+	
+	<definition name="mobileTaskModule.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobiletask/mobileTaskModule.jsp" />
+	</definition>
+	
+	<definition name="mobileClientList.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientList.jsp" />
+	</definition>
+	
+	<definition name="mobileadminList.tilesView" extends=".mobileAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminList.jsp" />
+	</definition>
+	
+	<definition name="mobileAdminFirmModule.tilesView" extends=".mobileAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminFirmModule.jsp" />
+	</definition>
+	
+	<definition name="mobileadminJurisdiction.tilesView" extends=".mobileAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminJurisdiction.jsp" />
+	</definition>
+	
+	<definition name="mobileAdminCodeType.tilesView" extends=".mobileAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminCodeType.jsp" />
+	</definition>
+	
+	<definition name="mobileAdminCode.tilesView" extends=".mobileAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminCode.jsp" />
+	</definition>
+	
+	<definition name="taskNotificationTemplate.tilesView" extends=".mobileAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminTaskNotificationTemplate.jsp" />
+	</definition>
+	
+	<definition name="mobileAdminTaskNotificationRecipient.tilesView" extends=".mobileAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminTaskNotificationRecipient.jsp" />
+	</definition>
+	<definition name="mobileClientDetail.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientDetail.jsp" />
+	</definition>
+	
+	<definition name="mobileClientStaff.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientstaffList.jsp" />
+	</definition>
+	
+	<definition name="mobileclientLocation.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientLocation.jsp" />
+	</definition>
+	
+	<definition name="mobileTaxModule.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobiletax/mobileTaxModule.jsp" />
+	</definition>
+	
+	<definition name="manageTaxModuleMobile.tilesView" extends=".mobileFirmAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobilefirmadmin/mobmanageTaxModule.jsp" />
+	</definition>
+	
+	<definition name="managePartyCodeMobile.tilesView" extends=".mobileFirmAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobilefirmadmin/mobmanagecode.jsp" />
+	</definition>
+	
+	<definition name="manageFirmStaffMobile.tilesView" extends=".mobileFirmAdminSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobilefirmadmin/mobmanagefirmstaff.jsp" />
+	</definition>
+	
+	<definition name="mobileClientBank.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientBank.jsp" />
+	</definition>
+	
+	<definition name="mobileClientIns.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientInsurance.jsp" />
+	</definition>
+	
+	<definition name="mobileclientOfficersAndShareHolders.tilesView" extends=".mobileClientSubMenuPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileclient/mobileClientOfficersAndShareHolders.jsp" />
+	</definition>
+	<definition name="mobileadminFirmEmployee.tilesView" extends=".mobiletabPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileadmin/mobileAdminFirmEmployee.jsp" />
+	</definition>
+	<!-- DASH BOARD JSP -->
+
+	 <definition name="mobiledashboard.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobiledashboard/mobiledashboard.jsp" />
+			
+	</definition>
+		
+	<!-- Change Mobile Passwowrd -->
+	
+	<definition name="mobileChangePassword.tilesView" extends=".mobiletablessPMTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/tiles2/pages/mobileuser/mobileChangePassword.jsp" />
+	</definition>
+	
+</tiles-definitions>
+                

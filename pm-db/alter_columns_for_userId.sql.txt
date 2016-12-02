@@ -1,0 +1,17 @@
+ALTER TABLE chiguru_test.tax_info_due_date_rule
+ DROP FOREIGN KEY due_date_rule_is_for_filing_type,
+ DROP FOREIGN KEY due_date_rule_is_for_practice_info,
+ CHANGE create_user_id create_user_id VARCHAR(50) NOT NULL,
+ CHANGE last_update_user_id last_update_user_id VARCHAR(50);
+ALTER TABLE chiguru_test.tax_info_due_date_rule
+ ADD CONSTRAINT due_date_rule_is_for_filing_type FOREIGN KEY (filing_type) REFERENCES chiguru_test.tax_info_filing_type (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+ ADD CONSTRAINT due_date_rule_is_for_practice_info FOREIGN KEY (practice_info_id) REFERENCES chiguru_test.tax_client_practice_info (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+ALTER TABLE chiguru2.tax_info_reminder
+ DROP FOREIGN KEY reminder_is_for_filing_type,
+ DROP FOREIGN KEY reminder_is_for_practice,
+ CHANGE create_user_id create_user_id VARCHAR(50) NOT NULL,
+ CHANGE last_update_user_id last_update_user_id VARCHAR(50);
+ALTER TABLE chiguru2.tax_info_reminder
+ ADD CONSTRAINT reminder_is_for_filing_type FOREIGN KEY (filing_type) REFERENCES chiguru2.tax_info_filing_type (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+ ADD CONSTRAINT reminder_is_for_practice FOREIGN KEY (practice_info_id) REFERENCES chiguru2.tax_client_practice_info (id) ON UPDATE RESTRICT ON DELETE RESTRICT;

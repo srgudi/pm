@@ -1,0 +1,31 @@
+html, body {height: 100%; }
+a{ outline:none;}
+body {background: url(../images/bg-login.jpg) repeat-x center; margin: 0; padding: 0; font-family: Helvetica, Arial, Tahoma, serif; font-size: 9pt;}
+span.clearFix {width:100%; height:0px; visibility:hidden; clear:both; display:block; margin:0; padding:0; font-size:0px;}
+div#distance { margin-bottom: -10em; width: 1px;height: 50%; float: left;}
+div#container {	position: relative;   text-align: left; height1: 150px;	width: 575px; margin: 0 auto; padding-top: 25px; clear: left;_padding-top:75px;}
+
+h1 {font-size:250%; text-transform:uppercase; letter-spacing:-1px; font-weight:bold; width:450px; 	margin: 0 0 30px 0; padding: 0;}
+h1 a {color:#fff; text-decoration:none; outline:none;}
+h1 a:hover {color:#ccc;}
+
+fieldset, form {margin: 0; padding: 0; border: 0; outline: 0;}
+fieldset legend {display: none;}
+
+ol {margin: 0; padding: 0; list-style: none;}
+ol li {float: left; margin-right: 15px;}
+label {display: block;}
+label.field-title {width:75px; color:#fff; font-weight: bold; float: left; padding-top: 3px;}
+label.txt-field {width: 186px; height: 21px; background: url(../images/bg-loginboxes.gif) no-repeat; float: left; margin-right: 10px}
+label.txt-field input {border: none; outline: none; background: none; padding: 2px 0 0 8px;}
+label.remember {color:#ccc; float:left; width: 120px; margin-top: 20px; margin-left:75px; margin-right: 50px;}
+a.forgot {color:#fff;float:left;margin-top: 25px; margin-left:42px; margin-right: 50px;text-decoration:none;}
+div.align-right {float: right; width: 56px;  margin-top: 23px;}
+#sessiosMsg {color:#fff;font-weight:bold;}
+.hidden{display:none;}
+.align-left {float:left;}
+div.inner-nav{margin-top:10px;}
+div.inner-nav .align-right {margin-top:0 !important;margin-right:20px;}
+div.inner-nav a, a.button { background:transparent url(../images/bg-buttons-left.gif) no-repeat scroll 0 0;color:#FFFFFF;display:inline-block;font-size:9pt;font-weight:bold;height:21px;padding:0 0 0 15px;text-decoration:none;}
+div.inner-nav a span, a.button span {background:transparent url(../images/bg-buttons-right.gif) no-repeat scroll right center;display:block;line-height:21px;padding:0 15px 0 0;}
+#forgotPassword #emailID {width:215px;}

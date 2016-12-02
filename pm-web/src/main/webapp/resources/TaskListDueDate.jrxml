@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TaskListDueDate" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SortBy" class="java.lang.String"/>
+	<parameter name="From" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="To" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select task.`id`, task.`staff_in_charge`, task.`partner_in_charge`,
+  task.`client_staff_in_charge`, task.`due_date`, party.`name` as PName,
+  party.`party_id` as PID, task.`firm_id`, partner.`party_id` as PRID, partner.`name`  as PRName,
+  clientsic.`party_id` as CPID, clientsic.`name` as CName, firm.`party_id` as FPID, firm.`name` as FName ,task.filing_title,practice.name as PCName,
+  status.status
+  from `task` as task, `party` as party,
+       `party` as partner, `party` as clientsic,
+       `party` as firm,tax_application_practice_type as practice,
+       task_status as status
+  where task.staff_in_charge = party.party_id and task.partner_in_charge = partner.party_id
+    and task.customer_id = clientsic.party_id
+    and task.firm_id = firm.party_id and practice.id =task.partice_id and
+    task.status=status.id  and task.due_date
+  Between $P{From} and $P{To} ORDER BY $P!{SortBy}]]>
+	</queryString>
+	<field name="id" class="java.math.BigInteger"/>
+	<field name="staff_in_charge" class="java.math.BigInteger"/>
+	<field name="partner_in_charge" class="java.math.BigInteger"/>
+	<field name="client_staff_in_charge" class="java.math.BigInteger"/>
+	<field name="due_date" class="java.sql.Timestamp"/>
+	<field name="PName" class="java.lang.String"/>
+	<field name="PID" class="java.math.BigInteger"/>
+	<field name="firm_id" class="java.math.BigInteger"/>
+	<field name="PRID" class="java.math.BigInteger"/>
+	<field name="PRName" class="java.lang.String"/>
+	<field name="CPID" class="java.math.BigInteger"/>
+	<field name="CName" class="java.lang.String"/>
+	<field name="FPID" class="java.math.BigInteger"/>
+	<field name="FName" class="java.lang.String"/>
+	<field name="filing_title" class="java.lang.String"/>
+	<field name="PCName" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="23" y="34" width="243" height="20" forecolor="#339900" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TASK LIST BY DUE DATE]]></text>
+			</staticText>
+			<image>
+				<reportElement x="326" y="14" width="225" height="58"/>
+				<imageExpression><![CDATA["\\logo\\logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="11" width="100" height="20" backcolor="#339900"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Firm Name :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="123" y="11" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="51" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="13" y="28" width="82" height="20" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Client Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="95" y="28" width="83" height="20" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Partner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="178" y="28" width="81" height="20" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Employee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="259" y="28" width="76" height="20" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Task Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="335" y="28" width="77" height="20" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Filing Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="412" y="28" width="58" height="20" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="470" y="28" width="72" height="20" backcolor="#339900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Due Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="44" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="13" y="0" width="82" height="27" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="95" y="0" width="83" height="27" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{PRName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="178" y="0" width="81" height="27" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{PName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="259" y="0" width="76" height="27" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{PCName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="335" y="0" width="77" height="27" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{filing_title}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="412" y="0" width="58" height="27" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="470" y="0" width="72" height="27" backcolor="#FFFFC7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{due_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,4 @@
+<jboss-web>
+    <context-root>pm</context-root>
+    
+</jboss-web>

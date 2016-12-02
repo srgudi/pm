@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<global-method-security pre-post-annotations="enabled" secured-annotations="enabled">
+		
+	</global-method-security>	
+	<http use-expressions="true" auto-config="false" entry-point-ref="myAuthenticationEntryPoint" >
+	
+	<custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter" />
+		
+		<intercept-url pattern="/css/**" access="permitAll"/>
+		<intercept-url pattern="/resources/**" access="permitAll"/>
+		<intercept-url pattern="/images/**" access="permitAll"/>
+		<intercept-url pattern="/js/**" access="permitAll"/>
+		<intercept-url pattern="/thirdparty/**" access="permitAll"/>
+		<intercept-url pattern="/jqgrid/**" access="permitAll"/>
+		<intercept-url pattern="/NEW_UI/**" access="permitAll"/>			
+		<intercept-url pattern="/login.jsp" access="permitAll"/>
+		<intercept-url pattern="/appadmin/colorboxtest.do" access="permitAll"/>
+		<intercept-url pattern="/mobile_login.jsp" access="permitAll"/>
+		<intercept-url pattern="/mobiledev/mobilePage.jsp" access="permitAll"/>
+		<intercept-url pattern="/mobiledev/load.do" access="permitAll"/>
+		<intercept-url pattern="/mobiledev/add.do" access="permitAll"/>
+		<intercept-url pattern="/mobiledev/home.jsp" access="permitAll"/>
+		<intercept-url pattern="/mobiledev/firmModule.jsp" access="permitAll"/>
+		<intercept-url pattern="/mobiledev/mobileAjaxAdminFirmModule.do" access="permitAll"/>
+		<intercept-url pattern="/mobiledev/**" access="permitAll"/>
+		<intercept-url pattern="/user/forgotPassword.jsp" access="permitAll"/>
+		 <intercept-url pattern="/user/forgotPassword.do" access="permitAll"/>
+		<intercept-url pattern="/user/receivePassword.jsp"  access="permitAll"/>
+		<intercept-url pattern="/user/receivePassword.do" access="permitAll"/>
+		<intercept-url pattern="/captcha.do" access="permitAll"/>
+		<intercept-url pattern="/reports/clientListwithDetailsJasperReport.jsp" access="permitAll"/>
+		<intercept-url pattern="/task/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_FIRM_ADMIN','ROLE_APP_ADMIN','ROLE_CLIENT_STAFF')" />	
+		
+		<intercept-url pattern="/appadmin/**"
+			access="hasAnyRole('ROLE_APP_ADMIN')" />
+		
+		<intercept-url pattern="/firmadmin/**"
+			access="hasAnyRole('ROLE_FIRM_ADMIN', 'ROLE_APP_ADMIN')" />
+				
+		<intercept-url pattern="/client/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_APP_ADMIN','ROLE_FIRM_ADMIN','ROLE_CLIENT_STAFF')" />
+		
+		<intercept-url pattern="/reports/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_APP_ADMIN','ROLE_FIRM_ADMIN','ROLE_CLIENT_STAFF')" />
+			
+		<intercept-url pattern="/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_APP_ADMIN','ROLE_FIRM_ADMIN','ROLE_CLIENT_STAFF')" />
+		
+		<logout invalidate-session="true" logout-success-url="/login.jsp"
+			logout-url="/j_spring_security_logout" />
+
+		
+		<remember-me />
+		
+
+	</http>
+
+
+	<beans:bean id="customPracticeManagementJdbcUserService"
+		class="com.chiguru.pm.security.SecurityJdbcUserDetailsManager">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+	
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref='customPracticeManagementJdbcUserService' >
+			<password-encoder hash="md5">
+				<!-- <salt-source ref="saltSource"/> -->
+			</password-encoder>
+		</authentication-provider>	
+	</authentication-manager>
+
+<beans:bean id="customAuthenticationFilter" class="com.chiguru.pm.security.CustomUsernamePasswordAuthenticationFilter">
+  <beans:property name="authenticationManager" ref="authenticationManager"/>
+  <beans:property name="filterProcessesUrl" value="/j_spring_security_check"/>
+   <beans:property name="authenticationSuccessHandler" ref="successHandler"/>
+   <beans:property name="authenticationFailureHandler" ref="failureHandler"/>
+   <beans:property name="sessionAuthenticationStrategy" ref="sas"/>
+   <beans:property name="captchaService" ref="captchaService"/>
+</beans:bean> 
+
+ <beans:bean id="sas" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+    <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+    <beans:property name="maximumSessions" value="20" />
+ </beans:bean>
+ 
+ <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+  
+<beans:bean id="myAuthenticationEntryPoint" class="com.chiguru.pm.security.CustomAuthenticationEntryPoint" >
+<beans:property name="loginFormUrl" value="/login.jsp"/>
+<beans:property name="mobileLoginFormUrl" value="/mobile_login.jsp"/>
+</beans:bean>
+<beans:bean id="exceptionTranslationFilter"
+     class="org.springframework.security.web.access.ExceptionTranslationFilter">
+  <beans:property name="accessDeniedHandler" ref="accessDeniedHandler"/> 
+   <beans:property name="authenticationEntryPoint" ref="myAuthenticationEntryPoint"/>
+</beans:bean>
+<beans:bean id="accessDeniedHandler"
+     class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+  <beans:property name="errorPage" value="/accessDenied.htm"/>
+</beans:bean>
+<beans:bean id="successHandler" class="com.chiguru.pm.security.CustomSuccessHandler">
+ <beans:property name="defaultTargetUrl" value="/client/mainClient.do"/>
+ <beans:property name="staffTargetUrl" value="/task/mainTask.do"/>
+ <beans:property name="mobileTargetUrl" value="/mobile/home.do"/>
+ <beans:property name="alwaysUseDefaultTargetUrl" value="true"/>
+</beans:bean>
+<beans:bean id="failureHandler"
+        class="com.chiguru.pm.security.CustomFailureHandler">
+    <beans:property name="defaultFailureUrl" value="/login.jsp?error=login_error"/>
+    <beans:property name="mobileFailureUrl" value="/mobile_login.jsp?error=login_error"/>
+  </beans:bean>
+ 
+  <!--  SANJEEV changes for JCAPTCHA -->
+<beans:bean name="/captcha.do" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService" id="imageCaptchaService"/>
+
+<beans:bean id="imageEngine" class="com.octo.captcha.engine.GenericCaptchaEngine">
+	<beans:constructor-arg index="0">
+		<beans:list>
+			<beans:ref bean="CaptchaFactory"/>
+		</beans:list>
+	</beans:constructor-arg>
+</beans:bean>
+<beans:bean id="CaptchaFactory" class="com.octo.captcha.image.gimpy.GimpyFactory" >
+	<beans:constructor-arg><beans:ref bean="wordgen"/></beans:constructor-arg>
+	<beans:constructor-arg><beans:ref bean="wordtoimage"/></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="wordgen" class= "com.octo.captcha.component.word.wordgenerator.DictionaryWordGenerator" >
+	<beans:constructor-arg><beans:ref bean="filedict"/></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="filedict" class="com.octo.captcha.component.word.FileDictionary" >
+	<beans:constructor-arg index="0"><beans:value>toddlist</beans:value></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="wordtoimage" class="com.octo.captcha.component.image.wordtoimage.ComposedWordToImage" >
+	<beans:constructor-arg index="0"><beans:ref bean="fontGenRandom"/></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:ref bean="backGenUni"/></beans:constructor-arg>
+	<beans:constructor-arg index="2"><beans:ref bean="simpleWhitePaster"/></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="fontGenRandom" class="com.octo.captcha.component.image.fontgenerator.RandomFontGenerator" >
+	<beans:constructor-arg index="0"><beans:value>40</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>50</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="2">
+		<beans:list>
+			<beans:ref bean="fontArial"/>
+		</beans:list>
+	</beans:constructor-arg>
+</beans:bean>
+<beans:bean id="fontArial" class="java.awt.Font" >
+	<beans:constructor-arg index="0"><beans:value>Arial</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>0</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="2"><beans:value>10</beans:value></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="backGenUni" class="com.octo.captcha.component.image.backgroundgenerator.UniColorBackgroundGenerator" >
+	<beans:constructor-arg index="0"><beans:value>300</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>100</beans:value></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="simpleWhitePaster" class="com.octo.captcha.component.image.textpaster.SimpleTextPaster" >
+	<beans:constructor-arg type="java.lang.Integer" index="0">
+		<beans:value>3</beans:value>
+	</beans:constructor-arg>
+	<beans:constructor-arg type="java.lang.Integer" index="1">
+		<beans:value>5</beans:value>
+	</beans:constructor-arg>
+	<beans:constructor-arg type="java.awt.Color" index="2">
+		<beans:ref bean="colorGreen"/>
+	</beans:constructor-arg>
+</beans:bean>
+ <beans:bean id="colorGreen" class="java.awt.Color" >
+	<beans:constructor-arg index="0"><beans:value>0</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>1</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="2"><beans:value>1</beans:value></beans:constructor-arg>
+</beans:bean> 
+
+<beans:bean id="backgroundColor" class="java.awt.Color" >
+ <beans:constructor-arg type="int" index="0" value="230"/><!-- red   -->
+ <beans:constructor-arg type="int" index="1" value="230"/><!-- green -->
+ <beans:constructor-arg type="int" index="2" value="230"/><!-- blue-->
+</beans:bean>
+<beans:bean id="captchaService" class="com.octo.captcha.service.multitype.GenericManageableCaptchaService">
+ <beans:constructor-arg index="0" ref="imageEngine"/>
+ <beans:constructor-arg type="int" index="1" value="180"/> <!-- minGuarantedStorageDelayInSeconds -->
+ <beans:constructor-arg type="int" index="2" value="180000"/> <!-- maxCaptchaStoreSize -->
+ <beans:constructor-arg type="int" index="3" value="75000"/> <!-- captchaStoreLoadBeforeGarbageCollection -->
+</beans:bean>
+
+
+
+</beans:beans>
+
+

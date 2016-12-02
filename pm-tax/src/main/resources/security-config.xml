@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- - Sample namespace-based configuration - -->
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<global-method-security pre-post-annotations="enabled" secured-annotations="enabled">
+		<!-- AspectJ pointcut expression that locates our "post" method and applies 
+			security that way <protect-pointcut expression="execution(* bigbank.*Service.post*(..))" 
+			access="ROLE_TELLER"/> -->
+	</global-method-security>	
+	<http use-expressions="true" auto-config="true">
+	
+	
+		<!-- <intercept-url pattern="/WEB-INF/views/**" access="hasRole('ROLE_SUPERVISOR')" 
+			/> <intercept-url pattern="/WEB-INF/views/**" access="isAuthenticated()" 
+			/> Disable web URI authorization, as we're using <global-method-security> 
+			and have @Secured the services layer instead <intercept-url pattern="/listAccounts.html" 
+			access="isRememberMe()" /> <intercept-url pattern="/post.html" access="hasRole('ROLE_TELLER')" 
+			/> <intercept-url pattern="/**" access="permitAll" /> -->
+		<intercept-url pattern="/css/**" access="permitAll"/>
+		<intercept-url pattern="/images/**" access="permitAll"/>
+		<intercept-url pattern="/js/**" access="permitAll"/>
+		<intercept-url pattern="/thirdparty/**" access="permitAll"/>
+		<intercept-url pattern="/jqgrid/**" access="permitAll"/>
+		<!--  Adding NEW_UI path temporarily, once merged completely to be traced to correct path -->
+		<intercept-url pattern="/NEW_UI/**" access="permitAll"/>			
+		<intercept-url pattern="/login.jsp" access="permitAll"/>
+		<intercept-url pattern="/user/forgotPassword.jsp" filters="none"/>
+		 <intercept-url pattern="/user/forgotPassword.do" filters="none"/>
+		<intercept-url pattern="/user/receivePassword.jsp"  filters="none"/>
+		<intercept-url pattern="/user/receivePassword.do" filters="none"/>
+		<intercept-url pattern="/captcha.do" access="permitAll"/>
+		<intercept-url pattern="/task/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER', 'ROLE_CLIENT_STAFF')" />	
+			
+		<intercept-url pattern="/appadmin/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_APP_ADMIN','ROLE_FIRM_ADMIN')" />	
+			
+		<intercept-url pattern="/firmadmin/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_APP_ADMIN','ROLE_FIRM_ADMIN')" />	
+				
+		<intercept-url pattern="/client/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_APP_ADMIN','ROLE_FIRM_ADMIN')" />
+			
+		<intercept-url pattern="/**"
+			access="hasAnyRole('ROLE_STAFF', 'ROLE_FIRM_PARTNER','ROLE_APP_ADMIN','ROLE_FIRM_ADMIN')" />
+		
+		<!-- <form-login login-page='/login.jsp' default-target-url="/task/taskList.do"
+			always-use-default-target='true' /> 
+			
+		<intercept-url pattern="/**"
+			access="ROLE_APP_ADMIN,ROLE_FIRM_ADMIN" />
+			<intercept-url pattern="/taskList.do"
+			access="ROLE_STAFF"  />
+		<form-login authentication-failure-url="/login.jsp" default-target-url='/task/taskList.do'
+			always-use-default-target='true' /> -->
+		<logout invalidate-session="true" logout-success-url="/login.jsp"
+			logout-url="/j_spring_security_logout" />
+		
+		<!--  Disable remember me support as of now -->
+		<remember-me />
+		
+		
+		
+		<!-- This will prevent a user from logging in multiple times - a second login will cause the first to be
+			 invalidated. Often you would prefer to prevent a second login -->
+		<!-- <session-management>
+			<concurrency-control max-sessions="20" error-if-maximum-exceeded="true" />
+    	</session-management> -->
+
+	</http>
+
+	<!-- Usernames/Passwords are rod/koala dianne/emu scott/wombat peter/opal 
+		<authentication-manager> <authentication-provider> <password-encoder hash="md5" 
+		/> <user-service> <user name="rod" password="a564de63c2d0da68cf47586ee05984d7" 
+		authorities="ROLE_STAFF, ROLE_USER, ROLE_PARTY" /> <user name="dianne" password="65d15fe9156f9c4bbffd98085992a44e" 
+		authorities="ROLE_USER,ROLE_PARTY" /> <user name="scott" password="2b58af6dddbd072ed27ffc86725d7d3a" 
+		authorities="ROLE_USER" /> <user name="peter" password="22b5c9accc6e1ba628cedc63a72d57f8" 
+		authorities="ROLE_USER" /> </user-service> </authentication-provider> </authentication-manager> -->
+
+
+	<!-- <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" 
+		/> -->
+
+	<!-- <beans:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource"> 
+		<beans:property name="userPropertyToUse" value="username" /> </beans:bean> -->
+	<!-- <beans:bean class="com.chiguru.web.security.DatabasePasswordSecurerBean" 
+		init-method="secureDatabase" depends-on="dataSource"> <beans:property name="dataSource" 
+		ref="dataSource" /> </beans:bean> -->
+
+	<beans:bean id="customPracticeManagementJdbcUserService"
+		class="com.chiguru.pm.security.SecurityJdbcUserDetailsManager">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+	
+
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref='customPracticeManagementJdbcUserService' />		
+	</authentication-manager>
+	
+	
+	<beans:bean id="customAuthenticationFilter" class="com.chiguru.pm.security.CustomUsernamePasswordAuthenticationFilter">
+  <beans:property name="authenticationManager" ref="authenticationManager"/>
+  <beans:property name="filterProcessesUrl" value="/j_spring_security_check"/>
+   <beans:property name="authenticationSuccessHandler" ref="successHandler"/>
+   <beans:property name="authenticationFailureHandler" ref="failureHandler"/>
+   <beans:property name="sessionAuthenticationStrategy" ref="sas"/>
+   <beans:property name="captchaService" ref="captchaService"/>
+</beans:bean> 
+
+ <beans:bean id="sas" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+    <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+    <beans:property name="maximumSessions" value="20" />
+ </beans:bean>
+ 
+ <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+  
+<beans:bean id="myAuthenticationEntryPoint" class="com.chiguru.pm.security.CustomAuthenticationEntryPoint" >
+<beans:property name="loginFormUrl" value="/login.jsp"/>
+</beans:bean>
+<beans:bean id="exceptionTranslationFilter"
+     class="org.springframework.security.web.access.ExceptionTranslationFilter">
+  <beans:property name="accessDeniedHandler" ref="accessDeniedHandler"/> 
+   <beans:property name="authenticationEntryPoint" ref="myAuthenticationEntryPoint"/>
+</beans:bean>
+<beans:bean id="accessDeniedHandler"
+     class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+  <beans:property name="errorPage" value="/accessDenied.htm"/>
+</beans:bean>
+<beans:bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+ <beans:property name="defaultTargetUrl" value="/client/clientList.do"/>
+ <beans:property name="alwaysUseDefaultTargetUrl" value="true"/>
+</beans:bean>
+<beans:bean id="failureHandler"
+        class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+    <beans:property name="defaultFailureUrl" value="/login.jsp?error=login_error"/>
+  </beans:bean>
+  
+
+<beans:bean name="/captcha.do" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService" id="imageCaptchaService"/>
+
+   <!--
+   5 minute 
+   --><!--<beans:bean name="/captcha.do" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService" id="imageCaptchaService"/>
+
+--><!--
+10 minute
+<beans:bean id="captchaEngine" class="com.octo.captcha.engine.image.gimpy.SimpleListImageCaptchaEngine"/>
+<beans:bean name="/captcha.do" id="captchaService" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService">
+<property name="captchaEngine" ref="captchaEngine"/>
+</bean>
+
+--><beans:bean id="imageEngine" class="com.octo.captcha.engine.GenericCaptchaEngine">
+	<beans:constructor-arg index="0">
+		<beans:list>
+			<beans:ref bean="CaptchaFactory"/>
+		</beans:list>
+	</beans:constructor-arg>
+</beans:bean>
+<beans:bean id="CaptchaFactory" class="com.octo.captcha.image.gimpy.GimpyFactory" >
+	<beans:constructor-arg><beans:ref bean="wordgen"/></beans:constructor-arg>
+	<beans:constructor-arg><beans:ref bean="wordtoimage"/></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="wordgen" class= "com.octo.captcha.component.word.wordgenerator.DictionaryWordGenerator" >
+	<beans:constructor-arg><beans:ref bean="filedict"/></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="filedict" class="com.octo.captcha.component.word.FileDictionary" >
+	<beans:constructor-arg index="0"><beans:value>toddlist</beans:value></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="wordtoimage" class="com.octo.captcha.component.image.wordtoimage.ComposedWordToImage" >
+	<beans:constructor-arg index="0"><beans:ref bean="fontGenRandom"/></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:ref bean="backGenUni"/></beans:constructor-arg>
+	<beans:constructor-arg index="2"><beans:ref bean="simpleWhitePaster"/></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="fontGenRandom" class="com.octo.captcha.component.image.fontgenerator.RandomFontGenerator" >
+	<beans:constructor-arg index="0"><beans:value>40</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>50</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="2">
+		<beans:list>
+			<beans:ref bean="fontArial"/>
+		</beans:list>
+	</beans:constructor-arg>
+</beans:bean>
+<beans:bean id="fontArial" class="java.awt.Font" >
+	<beans:constructor-arg index="0"><beans:value>Arial</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>0</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="2"><beans:value>10</beans:value></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="backGenUni" class="com.octo.captcha.component.image.backgroundgenerator.UniColorBackgroundGenerator" >
+	<beans:constructor-arg index="0"><beans:value>300</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>100</beans:value></beans:constructor-arg>
+</beans:bean>
+<beans:bean id="simpleWhitePaster" class="com.octo.captcha.component.image.textpaster.SimpleTextPaster" >
+	<beans:constructor-arg type="java.lang.Integer" index="0">
+		<beans:value>3</beans:value>
+	</beans:constructor-arg>
+	<beans:constructor-arg type="java.lang.Integer" index="1">
+		<beans:value>5</beans:value>
+	</beans:constructor-arg>
+	<beans:constructor-arg type="java.awt.Color" index="2">
+		<beans:ref bean="colorGreen"/>
+	</beans:constructor-arg>
+</beans:bean>
+<beans:bean id="colorGreen" class="java.awt.Color" >
+	<beans:constructor-arg index="0"><beans:value>0</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="1"><beans:value>1</beans:value></beans:constructor-arg>
+	<beans:constructor-arg index="2"><beans:value>1</beans:value></beans:constructor-arg>
+</beans:bean>
+
+<beans:bean id="backgroundColor" class="java.awt.Color" >
+ <beans:constructor-arg type="int" index="0" value="230"/><!-- red   -->
+ <beans:constructor-arg type="int" index="1" value="230"/><!-- green -->
+ <beans:constructor-arg type="int" index="2" value="230"/><!-- blue-->
+</beans:bean>
+<beans:bean id="captchaService" class="com.octo.captcha.service.multitype.GenericManageableCaptchaService">
+ <beans:constructor-arg index="0" ref="imageEngine"/>
+ <beans:constructor-arg type="int" index="1" value="180"/> <!-- minGuarantedStorageDelayInSeconds -->
+ <beans:constructor-arg type="int" index="2" value="180000"/> <!-- maxCaptchaStoreSize -->
+ <beans:constructor-arg type="int" index="3" value="75000"/> <!-- captchaStoreLoadBeforeGarbageCollection -->
+</beans:bean>
+
+
+
+</beans:beans>

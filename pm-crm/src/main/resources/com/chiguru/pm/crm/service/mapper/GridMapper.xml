@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chiguru.pm.crm.service.mapper.GridMapper">
+
+
+ <select id="getRelatedPartiesCountById" parameterType="com.chiguru.pm.crm.dto.SearchCommand" 
+         resultType="java.lang.Long">
+          SELECT count(client.party_id) as count 
+				 from organization as client 
+				 inner join party_relationship as relation on relation.subject = client.party_id 
+				 left outer join party as inChargePerson on client.in_charge_person = inChargePerson.party_id 
+				 left outer join point_of_contact poc on poc.party_id = client.party_id 
+				 inner join party_site as site on poc.party_site_id = site.id 
+				 inner join party as subject on subject.party_id = client.party_id 
+				 left outer join communication as phonComm on phonComm.contact_point_id = poc.id and phonComm.communication_type = 3 and phonComm.sub_type = 3 
+                 left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_type = 1 
+				 where relation.object = #{mainPartyId} and relation.relationship_type = #{relationshipTypeId}
+				 and site.party_site_type = 1 and subject.active_flag = #{activeFlag}
+				  <include refid="whereConditonForClinetList" />
+			</select>
+			
+			 <select id="getPartyDTOListById" parameterType="com.chiguru.pm.crm.dto.SearchCommand" 
+         resultType="com.chiguru.pm.crm.dto.PartyDTO">
+         select distinct client.party_id as partyId, client.name as name, inChargePerson.name as inChargePerson, 
+				phonComm.contact_detail as officeNumber, emailComm.contact_detail as emailAddress,subject.create_date as createDate 
+				from organization as client 
+				inner join party_relationship as relation on relation.subject = client.party_id 
+				left outer join party as inChargePerson on client.in_charge_person = inChargePerson.party_id 
+                left outer join point_of_contact poc on poc.party_id = client.party_id 
+			    inner join party_site as site on poc.party_site_id = site.id 
+                left outer join communication as phonComm on phonComm.contact_point_id = poc.id and phonComm.communication_type = 3 and phonComm.sub_type = 3 
+				left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_type = 1 
+				inner join party as subject on subject.party_id = client.party_id 
+				where relation.object = #{mainPartyId} and relation.relationship_type = #{relationshipTypeId}
+				and site.party_site_type = 1 and subject.active_flag = #{activeFlag}
+			  <include refid="whereConditonForClinetList" />
+		        order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if>
+			</select>
+			<sql id="whereConditonForClinetList">
+			 <if test="clientName != null">
+			AND client.name LIKE CONCAT('%', #{clientName}, '%')
+		    </if> 
+		<if test="eMail != null">
+			AND emailComm.contact_detail LIKE CONCAT('%', #{eMail}, '%')
+		</if>	
+		<if test="partId != null">
+			AND client.party_id = #{partId}
+		</if>
+		<if test="inChargePerson != null">
+			AND inChargePerson.name LIKE CONCAT('%', #{inChargePerson}, '%')
+		</if>
+		<if test="officeNumber != null">
+			AND phonComm.contact_detail LIKE CONCAT('%', #{officeNumber}, '%')
+		</if>			
+			</sql>
+			
+			
+			<select id="getTaskCountById" parameterType="com.chiguru.pm.crm.dto.TaskSearchCommand" 
+         resultType="java.lang.Long">
+         	select count(tk.id) as count 
+              from task as tk
+        inner join party as customer on tk.customer_id = customer.party_id
+	    inner join tax_application_practice_type as practice_type on tk.partice_id = practice_type.id
+   left outer join party as assignedParty on tk.staff_in_charge = assignedParty.party_id
+   left outer join party as clientStaffIncharge on tk.client_staff_in_charge = clientStaffIncharge.party_id
+   left outer join party as partnerInCharge on tk.partner_in_charge = partnerInCharge.party_id
+   left outer join task_status as tk_stauts on tk.status = tk_stauts.id
+             where tk.active_flag =#{activeFlag}
+              <include refid="whereConditonForTaskList" />
+         </select>
+         
+         <select id="getTasksDTOListForAFirm" parameterType="com.chiguru.pm.crm.dto.TaskSearchCommand" 
+         resultType="com.chiguru.pm.crm.dto.TaskNewDTO">
+          select tk.id as taskId,
+                customer.name as clientName, 
+                practice_type.name as PracticeType,
+                tk.filing_type as filingTypeFromDB, 
+                tk.due_date as dueDate, 
+                assignedParty.name as assignedTo,
+	            clientStaffIncharge.name as clientStaffInCharge, 
+                partnerInCharge.name as partnerInCharge, 
+                tk.task_type as taskType, 
+                tk_stauts.status as status,tk.active_flag as activeFlag
+	       from task as tk
+	 inner join party as customer on tk.customer_id = customer.party_id
+	 inner join tax_application_practice_type as practice_type on tk.partice_id = practice_type.id
+	 left outer join party as assignedParty on tk.staff_in_charge = assignedParty.party_id
+     left outer join party as clientStaffIncharge on tk.client_staff_in_charge = clientStaffIncharge.party_id
+	 left outer join party as partnerInCharge on tk.partner_in_charge = partnerInCharge.party_id
+	 left outer join task_status as tk_stauts on tk.status = tk_stauts.id
+          where tk.active_flag =#{activeFlag}
+          <include refid="whereConditonForTaskList" />
+		         order by dueDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+         </select>
+        	<sql id="whereConditonForTaskList">
+        	<if test="userRole == 'ROLE_FIRM_PARTNER'">
+        	AND tk.partner_in_charge =  #{id}
+        	</if>
+        	<if test="userRole == 'ROLE_STAFF'">
+        	AND tk.staff_in_charge =  #{id}
+        	</if>
+        	<if test="userRole == 'ROLE_CLIENT_STAFF'">
+        	AND tk.client_staff_in_charge =  #{id}
+        	</if>
+        	<if test="userRole != 'ROLE_CLIENT_STAFF'">
+        	AND tk.firm_id = #{mainPartyId}
+        	</if>
+			 <if test="taskId != null">
+			AND tk.id = #{taskId}
+		    </if> 
+		    <if test="clientName != null">
+			AND customer.name LIKE CONCAT('%', #{clientName}, '%')
+		    </if> 
+		     <if test="practiceType != null">
+			AND practice_type.name LIKE CONCAT('%', #{practiceType}, '%')
+		    </if> 
+		     <if test="dueDate != null">
+			AND tk.due_date = LIKE CONCAT('%', #{dueDate}, '%')
+		    </if> 
+		     <if test="filingTypeFromDB != null">
+			AND tk.filing_type = #{filingTypeFromDB}
+		    </if> 
+		    <if test="assignedTo != null">
+			AND assignedParty.name LIKE CONCAT('%', #{assignedTo}, '%')
+		    </if> 
+		    <if test="clientStaffInCharge != null">
+			AND clientStaffIncharge.name LIKE CONCAT('%', #{clientStaffInCharge}, '%')
+		    </if> 
+		     <if test="partnerInCharge != null">
+			AND partnerInCharge.name LIKE CONCAT('%', #{partnerInCharge}, '%')
+		    </if>
+		    <if test=" taskType != null">
+			AND  tk.task_type = #{taskType}
+		    </if> 
+		    <if test=" status != null">
+			AND   tk_stauts.status = #{status}
+		    </if> 
+		    <if test=" activeFlag != null">
+			AND   tk.active_flag = #{activeFlag}
+		    </if>
+			</sql> 
+			     	
+			<select id="getFirmStaffListCount" parameterType="com.chiguru.pm.crm.dto.FirmStaffSearch" 
+         resultType="java.lang.Long">
+         	select count(staff.party_id) as count
+              from party as staff 
+        inner join party_relationship as relation on relation.subject = staff.party_id 
+		inner join relationship_type as relationshipType on relationshipType.id = relation.relationship_type 
+   left outer join point_of_contact poc on poc.party_id = staff.party_id 
+   left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+   left outer join person as person on person.party_id = staff.party_id 
+   left outer join person_type as type on type.id = person.person_type
+   left outer join person_details as staffDetail on staffDetail.party_id = staff.party_id
+   left outer join code as jobCode on jobCode.id = staffDetail.job_title_code
+		     where relation.object = #{firmId} and staff.active_flag = #{activeFlag} and (type.id = #{staffTypeId} or type.id = #{partnerTypeId})
+         <include refid="whereConditonForFirmList" />
+         </select>
+         
+  <select id="getFirmStaffList" parameterType="com.chiguru.pm.crm.dto.FirmStaffSearch" resultType="com.chiguru.pm.crm.dto.PersonDTO">
+	select distinct staff.party_id as partyId,
+                    staff.name as name,
+                    staff.active_flag as activeFlag,
+                    staff.create_date as createdDate,
+                    relationshipType.type as relationshipType,
+				    type.type as role,
+                    emailComm.contact_detail as emailAddress, 
+                    jobCode.short_name as jobTitle,staff.create_date as createDate    
+			   from party as staff 
+	     inner join party_relationship as relation on relation.subject = staff.party_id 
+		 inner join relationship_type as relationshipType on relationshipType.id = relation.relationship_type 
+	left outer join point_of_contact poc on poc.party_id = staff.party_id 
+    left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+	left outer join person as person on person.party_id = staff.party_id 
+	left outer join person_type as type on type.id = person.person_type
+	left outer join person_details as staffDetail on staffDetail.party_id = staff.party_id
+	left outer join code as jobCode on jobCode.id = staffDetail.job_title_code
+		      where relation.object = #{firmId} and staff.active_flag = #{activeFlag} and (type.id = #{staffTypeId} or type.id = #{partnerTypeId})	
+      <include refid="whereConditonForFirmList" />
+      order by createdDate desc	
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+      </select>  
+      <sql id="whereConditonForFirmList">
+			 <if test="name != null">
+			AND staff.name LIKE CONCAT('%', #{name}, '%')
+		    </if> 
+		    <if test="relationshipType != null">
+			AND relationshipType.type LIKE CONCAT('%', #{relationshipType}, '%')
+		    </if>
+		     <if test="role != null">
+			AND type.type = #{role}
+		    </if> 
+		    <if test="emailAddress != null">
+			AND emailComm.contact_detail LIKE CONCAT('%', #{emailAddress}, '%')
+		    </if>
+		    <if test="jobTitle != null">
+			AND  jobCode.short_name LIKE CONCAT('%', #{jobTitle}, '%')
+		    </if>
+			</sql> 
+			
+			<select id="getFirmsCountById" parameterType="com.chiguru.pm.crm.dto.FirmSearch" 
+         resultType="java.lang.Long">
+			 SELECT count(firm.party_id) as count 
+			   from party as firm 
+    left outer join organization as organization on organization.party_id = firm.party_id 
+    left outer join point_of_contact as poc on poc.party_id = firm.party_id 
+    left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+	left outer join communication as homeNumber on homeNumber.contact_point_id = poc.id and homeNumber.communication_Type = 3 and homeNumber.sub_type = 4 
+    left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+		  	  where firm.party_type = #{partyTypeId} and organization.organization_type= #{organizationTypeId}
+			 <include refid="whereConditonForFirm" />
+			</select>
+			
+        <select id="getFirmsListById" parameterType="com.chiguru.pm.crm.dto.FirmSearch" resultType="com.chiguru.pm.crm.dto.PartyDTO">
+       select distinct organization.party_id as id, 
+                       firm.name as name, 
+                       officeNumber.contact_detail as officeNumber, 
+				       homeNumber.contact_detail as homeNumber, 
+                       emailComm.contact_detail as emailAddress, 
+                       firm.active_flag as activeFlag,firm.create_date as createDate  
+		          from party as firm 
+       left outer join organization as organization on organization.party_id = firm.party_id 
+   	   left outer join point_of_contact as poc on poc.party_id = firm.party_id 
+       left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+	   left outer join communication as homeNumber on homeNumber.contact_point_id = poc.id and homeNumber.communication_Type = 3 and homeNumber.sub_type = 4 
+	   left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+		         where firm.party_type = #{partyTypeId} and organization.organization_type= #{organizationTypeId}
+       <include refid="whereConditonForFirm" />
+       order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+       </select>
+        <sql id="whereConditonForFirm">
+			 <if test="id != null">
+			AND organization.party_id = #{id}
+		    </if> 
+		    <if test="filter != null">
+		    AND firm.name LIKE CONCAT('%', #{filter}, '%')
+		    </if>
+		     <if test="name != null">
+			AND firm.name LIKE CONCAT('%', #{name}, '%')
+		    </if> 
+		    <if test="officeNumber != null">
+			AND officeNumber.contact_detail LIKE CONCAT(#{officeNumber}, '%')
+		    </if> 
+		     <if test="homeNumber != null">
+			AND homeNumber.contact_detail LIKE CONCAT(#{homeNumber}, '%')
+		    </if> 
+		     <if test="emailAddress != null">
+			AND emailComm.contact_detail LIKE CONCAT ('%', #{emailAddress}, '%')
+		    </if> 	
+		     <if test="status != null">
+			AND  firm.active_flag = #{status}
+		    </if>  	 
+			</sql> 
+			
+			
+			<select id="getPartyAccountCountById" parameterType="com.chiguru.pm.crm.dto.AccountSearch" 
+         resultType="java.lang.Long">
+         select count(account.id) as count 
+		   from party_account account
+	 inner join party party on party.party_id = account.party_id 
+	 inner join code account_category on account_category.id = account.account_category 
+left outer join code account_type on account_type.id = account.account_type 
+left outer join point_of_contact poc on poc.account_id = account.id 
+left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+          where party.party_id = #{clientId}  and account_category.id = #{accountCategory} and account.active_flag = #{activeFlag}
+	       <include refid="whereConditonForPartyAccount" />
+         </select>
+         
+          <select id="getPartyAccountListById" parameterType="com.chiguru.pm.crm.dto.AccountSearch" resultType="com.chiguru.pm.crm.dto.PartyAccountDTO">
+                  select distinct account.id as newId,
+                                  account.account_entity_name as accountFirmName,
+                                  account_type.short_name as accountType, 
+                                  account.account_number as accountNumber,
+                                  poc.contact_name as contactName, 
+                                  officeNumber.contact_detail as officeNumber, 
+				                  emailComm.contact_detail as emailAddress,account.create_date as createDate  
+				             from party_account account 
+				       inner join party party on party.party_id = account.party_id 
+				       inner join code account_category on account_category.id = account.account_category 
+                  left outer join code account_type on account_type.id = account.account_type 
+				  left outer join point_of_contact poc on poc.account_id = account.id 
+                  left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+				  left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+			                where party.party_id = #{clientId}  and account_category.id = #{accountCategory} and account.active_flag = #{activeFlag}
+			               
+	       <include refid="whereConditonForPartyAccount" />
+                order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+          </select>
+          <sql id="whereConditonForPartyAccount">
+			 <if test="newId != null">
+			AND account.id = #{newId}
+		    </if>
+		    <if test="accountFirmName != null">
+			AND account.account_entity_name LIKE CONCAT ('%', #{accountFirmName}, '%')
+		    </if> 
+		    <if test="accountType != null">
+			AND account_type.short_name LIKE CONCAT ('%', #{accountType}, '%')
+		    </if> 
+		     <if test="accountNumber != null">
+			AND account.account_number LIKE CONCAT ('%', #{accountNumber}, '%')
+		    </if> 
+		    <if test="contactName != null">
+			AND poc.contact_name LIKE CONCAT ('%', #{contactName}, '%')
+		    </if> 
+		    <if test="officeNumber != null">
+			AND officeNumber.contact_detail LIKE CONCAT ('%', #{officeNumber}, '%')
+		    </if> 
+		    <if test="emailAddress != null">
+			AND emailComm.contact_detail LIKE CONCAT ('%', #{emailAddress}, '%')
+		    </if> 
+		    </sql>
+		    
+		  <select id="getLocationCount" parameterType="com.chiguru.pm.crm.dto.LocationSearch" 
+         resultType="java.lang.Long">  
+               SELECT count(site_location.id) as count 
+				 from party_site as site_location  
+      left outer join party as party on party.party_id = site_location.party_id 
+   	  left outer join party_site_type as location_type on location_type.id = site_location.party_site_type
+      left outer join point_of_contact as poc on poc.party_site_id = site_location.id 
+	  left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+	  left outer join communication as homeNumber on homeNumber.contact_point_id = poc.id and homeNumber.communication_Type = 3 and homeNumber.sub_type = 4 
+	  left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1
+		        where party.party_id = #{partyId} and site_location.active_flag = #{activeFlag}
+		         <include refid="whereConditonForLocation" />
+         </select>
+         
+          <select id="getLocationList" parameterType="com.chiguru.pm.crm.dto.LocationSearch" resultType="com.chiguru.pm.crm.dto.LocationDTO">
+          select distinct site_location.id as partySiteId,
+                          party.name as partyName, 
+				          site_location.name as name,
+                          location_type.name as locationType,
+                          officeNumber.contact_detail as officeNumber,
+                          homeNumber.contact_detail as homeNumber,
+                          emailComm.contact_detail as emailAddress,site_location.create_date as createDate  
+			         from party_site as site_location 
+	      left outer join party as party on party.party_id = site_location.party_id 
+   	      left outer join party_site_type as location_type on location_type.id = site_location.party_site_type
+		  left outer join point_of_contact as poc on poc.party_site_id = site_location.id 
+		  left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+          left outer join communication as homeNumber on homeNumber.contact_point_id = poc.id and homeNumber.communication_Type = 3 and homeNumber.sub_type = 4 
+		  left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1
+		            where party.party_id =#{partyId} and site_location.active_flag = #{activeFlag}
+		            
+		              <include refid="whereConditonForLocation" />
+		                order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+          </select>
+          
+           <sql id="whereConditonForLocation">
+			 <if test="partyName != null">
+			AND party.name LIKE CONCAT ('%', #{partyName}, '%')
+		    </if>
+		    <if test="name != null">
+			AND site_location.name LIKE CONCAT ('%', #{name}, '%')
+		    </if> 
+		    <if test="locationType != null">
+			AND location_type.name LIKE CONCAT ('%', #{locationType}, '%')
+		    </if> 
+		    <if test="officeNumber != null">
+			AND officeNumber.contact_detail LIKE CONCAT ('%', #{officeNumber}, '%')
+		    </if> 
+		    <if test="homeNumber != null">
+			AND homeNumber.contact_detail LIKE CONCAT ('%', #{homeNumber}, '%')
+		    </if> 
+		    <if test="emailAddress != null">
+			AND emailComm.contact_detail LIKE CONCAT ('%', #{emailAddress}, '%') 
+		    </if> 
+		    </sql>
+		    
+		   <select id="getStaffCountById" parameterType="com.chiguru.pm.crm.dto.StaffSearch" 
+         resultType="java.lang.Long"> 
+              select count(staff.party_id) as count
+		        from party as staff 
+	      inner join party_relationship as relation on relation.subject = staff.party_id
+	 left outer join person_details as staffDetail on staffDetail.party_id = staff.party_id 
+	 left outer join code as jobCode on jobCode.id = staffDetail.job_title_code 
+	 left outer join point_of_contact poc on poc.party_id = staff.party_id 
+	 left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+	 left outer join communication as homeNumber on homeNumber.contact_point_id = poc.id and homeNumber.communication_Type = 3 and homeNumber.sub_type = 4 
+	 left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+	    	   where relation.object = #{clientId} and relation.relationship_type = #{relationshipTypeId} and staff.active_flag = #{activeFlag}
+	    	      <include refid="whereConditonForStaff" />
+         </select>
+         
+          <select id="getPersonDTOListById" parameterType="com.chiguru.pm.crm.dto.StaffSearch" resultType="com.chiguru.pm.crm.dto.PersonDTO">
+     select distinct staff.party_id as partyId,
+                     staff.name as name,
+                     jobCode.short_name as jobTitle,
+                     officeNumber.contact_detail as officeNumber,
+                     homeNumber.contact_detail as homeNumber,
+                     emailComm.contact_detail as emailAddress,staff.create_date as createDate 
+				from party as staff
+		  inner join party_relationship as relation on relation.subject = staff.party_id
+	 left outer join person_details as staffDetail on staffDetail.party_id = staff.party_id 
+	 left outer join code as jobCode on jobCode.id = staffDetail.job_title_code 
+	 left outer join point_of_contact poc on poc.party_id = staff.party_id 
+	 left outer join communication as officeNumber on officeNumber.contact_point_id = poc.id and officeNumber.communication_Type = 3 and officeNumber.sub_type = 3 
+	 left outer join communication as homeNumber on homeNumber.contact_point_id = poc.id and homeNumber.communication_Type = 3 and homeNumber.sub_type = 4 
+	 left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1 
+	    	   where relation.object = #{clientId} and relation.relationship_type = #{relationshipTypeId} and staff.active_flag = #{activeFlag}
+	    	  
+	            <include refid="whereConditonForStaff" />
+                 <!-- order by #{sortName} #{sortType} -->
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+      </select>
+       <sql id="whereConditonForStaff">
+			 <if test="name != null">
+			AND staff.name LIKE CONCAT ('%', #{name}, '%')
+		    </if>
+		     <if test="jobTitle != null">
+			AND jobCode.short_name LIKE CONCAT ('%', #{jobTitle}, '%')
+		    </if>
+		     <if test="officeNumber != null">
+			AND officeNumber.contact_detail LIKE CONCAT ('%', #{officeNumber}, '%')
+		    </if>
+		     <if test="homeNumber != null">
+			AND homeNumber.contact_detail LIKE CONCAT ('%', #{homeNumber}, '%')
+		    </if>
+		     <if test="emailAddress != null">
+			AND emailComm.contact_detail LIKE CONCAT ('%', #{emailAddress}, '%')
+		    </if>
+		    </sql>
+		    
+		    <select id="getCliPracInfoCount" parameterType="com.chiguru.pm.crm.dto.TaxSearch" resultType="java.lang.Long"> 
+          select count(clientPracticeInfo.id) as count 
+            from tax_client_practice_info as clientPracticeInfo 
+      inner join jurisdiction as jurisdiction on clientPracticeInfo.jurisdiction = jurisdiction.id 
+      inner join party as client on clientPracticeInfo.client = client.party_id
+      inner join party as staffInChange on clientPracticeInfo.staff_in_charge = staffInChange.party_id
+      inner join party as clientStaff on clientPracticeInfo.client_staff_in_charge = clientStaff.party_id
+      inner join tax_firm_practice_type as firmPracticeType on clientPracticeInfo.tax_firm_practice_type = firmPracticeType.id
+      inner join tax_application_practice_type as appPracticeType on firmPracticeType.practice_id = appPracticeType.id 
+            where clientPracticeInfo.client = #{clientId} 
+            <include refid="whereConditonForTax" />
+         </select>
+         
+     <select id="getCliPracInfoList" parameterType="com.chiguru.pm.crm.dto.TaxSearch" resultType="com.chiguru.pm.crm.dto.ClientPracInfoDTO">
+               select clientPracticeInfo.id as clientPracticeInfoId,
+                      client.name as clientName,
+                      jurisdiction.country as juriCountry,
+                      jurisdiction.state as juriState,
+                      staffInChange.name as staffInChargeName,
+                      clientStaff.name as clientStaffInChargeName, 
+                      appPracticeType.name as taxReturn, 
+                      clientPracticeInfo.create_user_id as taskCreator,
+                      clientPracticeInfo.create_date as taskCreatedDate,
+                      clientPracticeInfo.active_flag as activeFlag 
+                 from tax_client_practice_info as clientPracticeInfo
+           inner join jurisdiction as jurisdiction on clientPracticeInfo.jurisdiction = jurisdiction.id 
+           inner join party as client on clientPracticeInfo.client = client.party_id
+           inner join party as staffInChange on clientPracticeInfo.staff_in_charge = staffInChange.party_id
+           inner join party as clientStaff on clientPracticeInfo.client_staff_in_charge = clientStaff.party_id
+           inner join tax_firm_practice_type as firmPracticeType on clientPracticeInfo.tax_firm_practice_type = firmPracticeType.id
+           inner join tax_application_practice_type as appPracticeType on firmPracticeType.practice_id = appPracticeType.id 
+                where clientPracticeInfo.client = #{clientId} 
+              <include refid="whereConditonForTax" />
+              order by taskCreatedDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+        </select>
+         <sql id="whereConditonForTax">
+			 <if test="clientPracticeInfoId != null">
+			AND clientPracticeInfo.id = #{clientPracticeInfoId}
+		    </if>
+		     <if test="clientName != null">
+			AND client.name LIKE CONCAT ('%', #{clientName}, '%')
+		    </if>
+		     <if test="jurisdictionName != null">
+			AND  jurisdiction.country LIKE CONCAT ('%', #{jurisdictionName}, '%')
+		    </if>
+		     <if test="staffInChargeName != null">
+			AND staffInChange.name LIKE CONCAT ('%', #{staffInChargeName}, '%')
+		    </if>
+		     <if test="clientStaffInChargeName != null">
+			AND clientStaff.name LIKE CONCAT ('%', #{clientStaffInChargeName}, '%')
+		    </if>
+		     <if test="taxReturn != null">
+			AND appPracticeType.name LIKE CONCAT ('%', #{taxReturn}, '%')
+		    </if>
+		     <if test="taskCreator != null">
+			AND   clientPracticeInfo.create_user_id LIKE CONCAT ('%', #{taskCreator}, '%')
+		    </if>
+		     <if test="taskCreatedDate != null">
+			  AND clientPracticeInfo.create_date LIKE CONCAT ('%', #{taskCreatedDate}, '%')
+		    </if>
+		     <if test="status != null">
+			  AND clientPracticeInfo.active_flag = #{status}
+		    </if>
+		    </sql>
+		    
+		    <select id="getTaxDTOListCount" parameterType="com.chiguru.pm.crm.dto.TaxSearch" resultType="java.lang.Long"> 
+                  SELECT count(firm_practice_type.id) as count 
+                    from tax_firm_practice_type as firm_practice_type 
+              inner join tax_application_practice_type as application_practice_type on application_practice_type.id = firm_practice_type.practice_id 
+                   where firm_practice_type.firm_id = #{firmId}
+                  <include refid="whereConditonForTaxType" />
+      </select>
+      <select id="getTaxDTOList" parameterType="com.chiguru.pm.crm.dto.TaxSearch" resultType="com.chiguru.pm.crm.dto.TaxDTO">
+       select firm_practice_type.id as taxId,
+              application_practice_type.name as name, 
+              application_practice_type.create_date as createdDate,
+              application_practice_type.description as description,
+              firm_practice_type.active_flag as activeFlag 
+         from tax_firm_practice_type as firm_practice_type 
+   inner join tax_application_practice_type as application_practice_type on application_practice_type.id = firm_practice_type.practice_id 
+        where firm_practice_type.firm_id = #{firmId}
+                  <include refid="whereConditonForTaxType" />
+                  order by createdDate desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditonForTaxType">
+                 <if test="name != null">
+			      AND application_practice_type.name  LIKE CONCAT('%', #{name}, '%')
+		         </if>
+		          <if test="description != null">
+			      AND application_practice_type.description LIKE CONCAT('%', #{description}, '%')
+		         </if>
+		         <if test="status != null">
+			      AND  firm_practice_type.active_flag = #{status}
+		         </if>
+                 </sql>  
+                 
+                 <select id="getJurisdictionListCount" parameterType="com.chiguru.pm.crm.dto.JurisdictionSearch" resultType="java.lang.Long"> 
+                   SELECT count(jurisdiction.id) as count 
+					from jurisdiction as jurisdiction
+		      inner join timezone as timezone
+		              on timezone.id = jurisdiction.timezone
+                  <include refid="whereConditonForJurisdiction" />
+      </select> 
+      
+       <select id="getJurisdictionDTOList" parameterType="com.chiguru.pm.crm.dto.JurisdictionSearch" resultType="com.chiguru.pm.crm.dto.JurisdictionDTO">
+       			select distinct jurisdiction.id as id,jurisdiction.country as country,jurisdiction.state as state,jurisdiction.city as city,
+				timezone.global_timezone_name as globalTimezoneName,timezone.gmt_deviation_hours as gmtDeviationHours, 
+				jurisdiction.active_flag as activeFlag,jurisdiction.create_date as createDate
+				from jurisdiction as jurisdiction
+		        inner join timezone as timezone
+		        on timezone.id = jurisdiction.timezone
+                  <include refid="whereConditonForJurisdiction" />
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditonForJurisdiction">
+                 <if test="country != null">
+			      AND jurisdiction.country LIKE CONCAT('%', #{country}, '%')
+		         </if>
+		          <if test="state != null">
+			      AND jurisdiction.state LIKE CONCAT('%', #{state}, '%')
+		         </if>
+		          <if test="city != null">
+			      AND jurisdiction.city LIKE CONCAT('%', #{city}, '%')
+		         </if>
+		          <if test="globalTimezoneName != null">
+			      AND timezone.global_timezone_name LIKE CONCAT('%', #{globalTimezoneName}, '%')
+		         </if>
+		         <if test="gmtDeviationHours != null">
+			      AND timezone.gmt_deviation_hours = #{gmtDeviationHours}
+		         </if>
+		          <if test="status != null">
+			        AND  jurisdiction.active_flag = #{status}
+		          </if>
+                 </sql>
+                 
+                 <select id="getCodeTypeListCount" parameterType="com.chiguru.pm.crm.dto.CodeTypeSearch" resultType="java.lang.Long"> 
+                 SELECT count(code_type.id) as count
+				from code_type as code_type
+				left outer join code_type as parent_code_type on parent_code_type.id = code_type.parent_code_type_id 
+				where code_type.active_flag in (0,1)
+				<include refid="whereConditionForAdminCodeType" />
+      			</select> 
+				
+                 <select id="getCodeTypeDTOList" parameterType="com.chiguru.pm.crm.dto.CodeTypeSearch" resultType="com.chiguru.pm.crm.dto.CodeTypeDTO">
+       			select code_type.id as id,code_type.name as name,code_type.description as description,parent_code_type.name as parentCodeTypeName,
+				code_type.application_level_indicator as applicationLevelIndicator,code_type.active_flag as activeFlag,code_type.create_date as createDate
+				from code_type as code_type
+				left outer join code_type as parent_code_type on parent_code_type.id = code_type.parent_code_type_id 
+				where code_type.active_flag in (0,1)
+                  <include refid="whereConditionForAdminCodeType" />
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditionForAdminCodeType">
+                 <if test="name != null">
+			     AND code_type.name LIKE CONCAT('%', #{name}, '%')
+		         </if>
+		          <if test="description != null">
+			      AND code_type.description LIKE CONCAT('%', #{description}, '%')
+		         </if>
+		          <if test="parentCodeTypeName != null">
+			      AND parent_code_type.name LIKE CONCAT('%', #{parentCodeTypeName}, '%')
+		         </if>
+		          <if test="strApplicationLevelIndicator != null">
+			      AND code_type.application_level_indicator = #{strApplicationLevelIndicator}
+		         </if>
+		         <if test="status != null">
+			      AND code_type.active_flag = #{status}
+		         </if>
+                 </sql>  
+                 
+                 <select id="getTaskNotificationTemplateListCount" parameterType="com.chiguru.pm.crm.dto.TaskNotificationTemplateSearch" resultType="java.lang.Long"> 
+                   SELECT count(task_notification_template.id) as count
+					from task_notification_template as task_notification_template 
+						where task_notification_template.active_flag in (0,1)
+				<include refid="whereConditonForTemplate"/>
+      			</select> 
+                 
+                <select id="getTaskNotificationTemplateDTOList" parameterType="com.chiguru.pm.crm.dto.TaskNotificationTemplateSearch" resultType="com.chiguru.pm.crm.dto.TaskNotificationTemplateDTO">
+       			select task_notification_template.id as id,task_notification_template.subject as subject,task_notification_template.body as bodyText,task_notification_template.additional_emailId as adminEmailId,task_notification_template.active_flag as activeFlag,task_notification_template.create_date as createDate 
+				from task_notification_template as task_notification_template 
+				where task_notification_template.active_flag in (0,1)
+                  <include refid="whereConditonForTemplate"/>
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditonForTemplate">
+                 <if test="subject != null">
+			     AND task_notification_template.subject LIKE CONCAT('%', #{subject}, '%')
+		         </if>
+		          <if test="bodyText != null">
+			      AND task_notification_template.body LIKE CONCAT('%', #{bodyText}, '%')
+		         </if>
+		          <if test="adminEmailId != null">
+			      AND task_notification_template.additional_emailId LIKE CONCAT('%', #{adminEmailId}, '%')
+		         </if>
+		         <if test="status != null">
+			      AND task_notification_template.active_flag = #{status}
+		         </if>
+                 </sql>   
+                 
+                 <select id="getTaskNotificationRecipientListCount" parameterType="com.chiguru.pm.crm.dto.TaskNotificationRecipientSearch" resultType="java.lang.Long"> 
+                 SELECT count(notification_recipient.recipient) as count
+				 from task_notification_recipient as notification_recipient 
+				 left outer join task_notification_template as notification_template on notification_template.id = notification_recipient.template_id
+				  where notification_recipient.active_flag in (0,1)
+				<include refid="whereConditonForRecipient" />
+      			</select> 
+      			
+      			<select id="getTaskNotificationRecipientDTOList" parameterType="com.chiguru.pm.crm.dto.TaskNotificationRecipientSearch" resultType="com.chiguru.pm.crm.dto.TaskNotificationRecipientDTO">
+       			select notification_recipient.notification_type as id, notification_recipient.recipient as recipient,notification_recipient.email_type as emailType,
+                notification_template.subject as typeOfNotificationTemplate, notification_recipient.active_flag as activeFlag,notification_recipient.create_date as createDate
+                from task_notification_recipient as notification_recipient
+                left outer join task_notification_template as notification_template on notification_template.id = notification_recipient.template_id
+                where notification_recipient.active_flag in (0,1)
+                  <include refid="whereConditonForRecipient" />
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditonForRecipient">
+                 <if test="recipient != null">
+			     AND notification_recipient.recipient LIKE CONCAT('%', #{recipient}, '%')
+		         </if>
+		          <if test="emailType != null">
+			      AND notification_recipient.email_type  LIKE CONCAT('%', #{emailType}, '%')
+		         </if>
+		          <if test="typeOfNotificationTemplate != null">
+			      AND notification_template.subject LIKE CONCAT('%', #{typeOfNotificationTemplate}, '%')
+		         </if>
+		          <if test="status != null">
+			      AND notification_recipient.active_flag = #{status}
+		         </if>
+                 </sql> 
+                 
+                   <select id="getOfficersAndShareHoldersListCount" parameterType="com.chiguru.pm.crm.dto.OfficerShareholderSearch" resultType="java.lang.Long"> 
+                 SELECT count(staff.party_id) as count
+				from party as staff
+				inner join party_relationship as relation on relation.subject = staff.party_id
+				left outer join person_details as staffDetail on staffDetail.party_id = staff.party_id
+				left outer join code as jobCode on jobCode.id = staffDetail.job_title_code
+				left outer join code as typeOfShareCode on typeOfShareCode.id = staffDetail.type_of_share
+				where relation.object = #{mainPartyId} and relation.relationship_type = #{relationshipTypeId} and staff.active_flag = true and staffDetail.no_of_shares_owned != ''
+				<include refid="whereConditonForOfficersAndShareHolders" />
+      			</select> 
+      			
+      			<select id="getOfficersAndShareHoldersList" parameterType="com.chiguru.pm.crm.dto.OfficerShareholderSearch" resultType="com.chiguru.pm.crm.dto.PartyDTO">
+       			select distinct staff.party_id as id, staff.name as name, typeOfShareCode.short_name as typeOfShare, 
+				staffDetail.no_of_shares_owned as bigIntNoOfSharesOwned,staff.create_date as createDate
+				from party as staff
+				inner join party_relationship as relation on relation.subject = staff.party_id
+				left outer join person_details as staffDetail on staffDetail.party_id = staff.party_id
+				left outer join code as jobCode on jobCode.id = staffDetail.job_title_code
+				left outer join code as typeOfShareCode on typeOfShareCode.id = staffDetail.type_of_share 
+				where relation.object = #{mainPartyId} and relation.relationship_type = #{relationshipTypeId} and staff.active_flag = true and staffDetail.no_of_shares_owned != ''
+                  <include refid="whereConditonForOfficersAndShareHolders" />
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditonForOfficersAndShareHolders">
+                 <if test="name != null">
+			      AND staff.name LIKE CONCAT('%', #{name}, '%')
+		         </if>
+		          <if test="typeOfShare != null">
+			      AND typeOfShareCode.short_name LIKE CONCAT('%', #{typeOfShare}, '%')
+		         </if>
+		          <if test="noOfSharesOwned != null">
+			      AND staffDetail.no_of_shares_owned = #{noOfSharesOwned}
+		         </if>
+                 </sql> 	
+                 
+                 <select id="getAdminCodeListCount" parameterType="com.chiguru.pm.crm.dto.CodeSearch" resultType="java.lang.Long"> 
+                 select  count(code.id) as count
+				from code as code 
+				left outer join code_type as code_type on code_type.id = code.code_type_id
+		  		where code.application_level_indicator = #{applicationLevelId} and code.code_type_id = #{codeTypeId}
+				<include refid="whereConditonForAdminCodeList" />
+      			</select> 	
+      			
+                 <select id="getAllAdminCodeListCount" parameterType="com.chiguru.pm.crm.dto.CodeSearch" resultType="java.lang.Long"> 
+                 select  count(code.id) as count
+				from code as code 
+				left outer join code_type as code_type on code_type.id = code.code_type_id
+		  		where code.application_level_indicator = #{applicationLevelId} 
+				<include refid="whereConditonForAdminCodeList" />
+      			</select>
+      			
+      			<select id="getAdminCodeDTOList" parameterType="com.chiguru.pm.crm.dto.CodeSearch" resultType="com.chiguru.pm.crm.dto.CodeDTO">
+       			select code.id as id, code.short_name as shortName,code.long_description as longDescription,code_type.name as codeTypeName,  
+				code.application_level_indicator as applicationLevelIndicator, parentCode.short_name as parentCodeShortName, 
+				code.active_flag as activeFlag, code.create_date as createDate  
+				from code as code  
+				left outer join code_type as code_type on code_type.id = code.code_type_id  
+				left outer join code as parentCode on parentCode.id = code.parent_code_id  
+				where code.application_level_indicator = #{applicationLevelId} and code.code_type_id = #{codeTypeId} 
+                  <include refid="whereConditonForAdminCodeList" />
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 
+                  <sql id="whereConditonForAdminCodeList">
+                 <!-- <if test="codeTypeId != null">
+			      AND code_type.id = #{codeTypeId}
+		         </if> -->
+                 <if test="shortName != null">
+			      AND code.short_name LIKE CONCAT('%', #{shortName}, '%')
+		         </if>
+		          <if test="longDescription != null">
+			      AND code.long_description LIKE CONCAT('%', #{longDescription}, '%')
+		         </if>
+		          <if test="codeTypeName != null">
+			      AND code_type.name LIKE CONCAT('%', #{codeTypeName}, '%')
+		         </if>
+		         <if test="strApplicationLevelIndicator != null">
+			      AND code.application_level_indicator = #{strApplicationLevelIndicator}
+		         </if>
+		         <if test="parentCodeShortName != null">
+			      AND parentCode.short_name LIKE CONCAT('%', #{parentCodeShortName}, '%')
+		         </if>
+		         <if test="status != null">
+			      AND code.active_flag = #{status}
+		         </if>
+                 </sql> 
+                 <select id="getAllAdminCodesDTOList" parameterType="com.chiguru.pm.crm.dto.CodeSearch" resultType="com.chiguru.pm.crm.dto.CodeDTO">
+       			select code.id as id, code.short_name as shortName,code.long_description as longDescription,code_type.name as codeTypeName,  
+				code.application_level_indicator as applicationLevelIndicator, parentCode.short_name as parentCodeShortName, code.active_flag as activeFlag  
+				from code as code  
+				left outer join code_type as code_type on code_type.id = code.code_type_id  
+				left outer join code as parentCode on parentCode.id = code.parent_code_id  
+				where  code.application_level_indicator = true
+                  <include refid="whereConditonForAdminCodeList" />
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                	
+                 
+                 <select id="getStaffListCount" parameterType="com.chiguru.pm.crm.dto.EmployeeSearch" resultType="java.lang.Long"> 
+                select count(staff.party_id) as count
+				from party as staff
+				inner join party_relationship as relation on relation.subject = staff.party_id
+				left outer join person as person on person.party_id = staff.party_id
+				left outer join person_type as type on type.id = person.person_type
+				where relation.object = #{firmId} and staff.active_flag = true and
+				(type.id = #{staffTypeId} or type.id = #{partnerTypeId} or type.id = #{firmAdminTypeId})
+				<include refid="whereConditonForStaffList" />
+      			</select> 
+      			
+      			<select id="getStaffList" parameterType="com.chiguru.pm.crm.dto.EmployeeSearch" resultType="com.chiguru.pm.crm.dto.PersonDTO">
+       			select distinct staff.party_id as partyId, staff.name as name,staff.active_flag as activeFlag,relationshipType.type as relationshipType,
+				type.type as role, emailComm.contact_detail as emailAddress, jobCode.short_name as jobTitle,staff.create_date as createDate  
+				from party as staff
+				inner join party_relationship as relation on relation.subject = staff.party_id
+				inner join relationship_type as relationshipType on relationshipType.id = relation.relationship_type
+				left outer join point_of_contact poc on poc.party_id = staff.party_id
+				left outer join communication as emailComm on emailComm.contact_point_id = poc.id and emailComm.communication_Type = 1
+ 				left outer join person as person on person.party_id = staff.party_id
+				left outer join person_type as type on type.id = person.person_type
+				left outer join person_details as staffDetail on staffDetail.party_id = staff.party_id
+				left outer join code as jobCode on jobCode.id = staffDetail.job_title_code
+ 				where relation.object = #{firmId} and staff.active_flag = true and
+				(type.id = #{staffTypeId} or type.id = #{partnerTypeId} or type.id = #{firmAdminTypeId})
+                  <include refid="whereConditonForStaffList" />
+                  order by createDate Desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditonForStaffList">
+                 <if test="name != null">
+			      AND staff.name LIKE CONCAT('%', #{name}, '%')
+		         </if>
+		          <if test="status != null">
+			      AND staff.active_flag = #{status}
+		         </if>
+		          <if test="relationshipType != null">
+			      AND relationshipType.type LIKE CONCAT('%', #{relationshipType}, '%')
+		         </if>
+		         <if test="role != null">
+			      AND type.type = #{role}
+		         </if>
+		         <if test="emailAddress != null">
+			      AND emailComm.contact_detail LIKE CONCAT('%', #{emailAddress}, '%')
+		         </if>
+		         <if test="jobTitle != null">
+			      AND jobCode.short_name LIKE CONCAT('%', #{jobTitle}, '%')
+		         </if>
+                 </sql> 
+                 
+               <select id="getCountOfCodeTypeByCodeTypeId" parameterType="com.chiguru.pm.crm.dto.CodeSearch" resultType="java.lang.Long"> 
+                select count(party_code.id) as count
+				from party_code as party_code
+				inner join code as code on code.id = party_code.code_id
+                inner join code_type as codeType on codeType.id = code.code_type_id 
+                left outer join code as parentCode on parentCode.id = code.parent_code_id 
+                inner join party as party on party.party_id = party_code.party_id
+		  		where party.party_id = #{firmId} 
+				<include refid="whereConditonForCType" />
+      			</select>  
+
+				<select id="getListOfCodeTypeByCodeTypeId" parameterType="com.chiguru.pm.crm.dto.CodeSearch" resultType="com.chiguru.pm.crm.dto.PartyCodeDTO">
+       			select  party_code.id as partyCodeId,code.short_name as codeShortName, codeType.name as codeCodeTypeName,
+				codeType.application_level_indicator as codeApplicationLevelIndicator, code.short_name as codeParentCodeShortName, code.create_date as createdDate,
+				party_code.sort_order as sortOrder,party_code.active_flag as activeFlag 
+                from party_code as party_code
+                inner join code as code on code.id = party_code.code_id
+                inner join code_type as codeType on codeType.id = code.code_type_id 
+                left outer join code as parentCode on parentCode.id = code.parent_code_id 
+                inner join party as party on party.party_id = party_code.party_id
+                where party.party_id = #{firmId} 
+                  <include refid="whereConditonForCType" />
+                  order by createdDate desc
+		         <if test="(count &gt; limit)">
+			     limit #{limit} offset #{offset}
+                 </if> 
+                 </select> 
+                 <sql id="whereConditonForCType">
+				 <if test="codeTypeId != null">
+			      AND codeType.id = #{codeTypeId}
+		         </if>
+                 <if test="codeShortName != null">
+			      AND code.short_name LIKE CONCAT('%', #{codeShortName}, '%') 
+		         </if>
+		          <if test="codeCodeTypeName != null">
+			      AND codeType.name LIKE CONCAT('%', #{codeCodeTypeName}, '%')
+		         </if>
+		          <if test="codeApplicationLevelIndicator != null">
+			      AND codeType.application_level_indicator = #{codeApplicationLevelIndicator}
+		         </if>
+		         <if test="codeParentCodeShortName != null">
+			      AND parentCode.short_name LIKE CONCAT('%', #{codeParentCodeShortName}, '%')
+		         </if>
+		         <if test="sortOrder != null">
+			      AND party_code.sort_order = #{sortOrder}
+		         </if>
+		         <if test="status != null">
+			      AND party_code.active_flag = #{status}
+		         </if>
+                 </sql>  
+                 
+</mapper>

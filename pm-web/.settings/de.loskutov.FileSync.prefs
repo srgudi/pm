@@ -1,0 +1,10 @@
+#Sun Feb 13 17:24:55 CST 2011
+WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
+defaultDestination=@target/pm.war/WEB-INF/classes
+defaultVariables=
+eclipse.preferences.version=1
+includeTeamPrivateFiles=false
+map|0=target/classes|,|,|,|,
+map|1=src/main/webapp/WEB-INF/spring|@target/pm.war/WEB-INF/spring|,|,|,
+map|2=src/main/webapp/WEB-INF/views|@target/pm.war/WEB-INF/views|,|,|,
+useCurrentDateForDestinationFiles=true

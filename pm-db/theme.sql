@@ -1,0 +1,2 @@
+ALTER TABLE users
+ ADD theme VARCHAR(20) NOT NULL DEFAULT 'South Street';

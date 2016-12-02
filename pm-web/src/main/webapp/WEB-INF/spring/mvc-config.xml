@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+
+	<!-- Enable annotation driven controllers, validation etc... -->
+	<mvc:annotation-driven />
+
+	<tx:annotation-driven />
+
+	<bean name="openSessionInViewInterceptor"
+		class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"
+		p:sessionFactory-ref="sessionFactory" />
+
+    <context:annotation-config />
+	<context:component-scan base-package="com.chiguru.pm.web.controller" />
+	<context:component-scan base-package="com.chiguru.pm.security.captcha"/>
+	<context:component-scan base-package="com.chiguru.pm"/>
+
+    <import resource="app-config.xml" />
+	<!-- <import resource="security-config.xml" /> -->
+	
+	<bean id="securityDelegatingFilterProxy" class="com.chiguru.pm.web.security.SecurityDelegatingFilterProxy"
+		lazy-init="true" />
+
+	<!-- Resolves view names to protected .jsp resources within the /WEB-INF/views 
+		directory -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="3" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	 <bean class="org.springframework.web.servlet.view.XmlViewResolver">
+			<property name ="location" value="/WEB-INF/spring/jasper-views.xml"/>
+			<property name ="order" value="0"/>
+	</bean>
+			
+	<!--  Adding Tiles 2 Support in order 3 for view resolution -->
+	<bean id="tilesViewResolver"
+		class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"
+		p:order="2" />
+
+	<!-- All available layouts -->
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles2/tiles-definitions.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="WEB-INF/messages/messages" />
+	</bean>
+	
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename" value="views"/>
+	</bean> 
+	<!-- adds a view for presenting the results of a request in JSON format -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="application/xml" />
+			</map>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<property name="marshaller">
+						<bean class="org.springframework.oxm.xstream.XStreamMarshaller" />
+					</property>
+
+				</bean>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+			</list>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+			</list>
+		</property>
+
+		<property name="ignoreAcceptHeader" value="true" />
+	</bean>
+
+	<!-- Define the OXM marshaller which is used to convert the Objects <-> 
+		XML. -->
+	<bean id="oxmMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller" />
+
+	<bean id="marshallingHttpMessageConverter"
+		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<property name="marshaller" ref="oxmMarshaller" />
+		<property name="unmarshaller" ref="oxmMarshaller" />
+	</bean>
+
+
+
+	<!-- Configures JSR-303 Declarative Validation with default provider on 
+		classpath (Hibernate Validator) -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+	<!-- Required for REST services in order to bind the return value to the 
+		ResponseBody. -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<!-- Configures Spring MVC DataBinder instances globally -->
+		<property name="webBindingInitializer">
+			<bean
+				class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+
+				<property name="validator" ref="validator" />
+			</bean>
+		</property>
+		<property name="messageConverters">
+			<util:list>
+
+				<!-- Support JSON -->
+				<bean
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+
+			</util:list>
+		</property>
+	</bean>
+
+	 <bean id="taskGeneratorJob" class="com.chiguru.pm.batch.TaskGeneratorJob" />
+	<bean id="jobGenerateTasksDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskGeneratorJob" />
+		<property name="targetMethod" value="generateTasks" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="jobGenerateTasksTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobGenerateTasksDetail" />
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+		<!-- value="0 0/5 * * * ?" job will run every 5 minute repeatedly.
+		value="0 0 22 * * ?" job will run every day 10pm once. -->
+	</bean>
+
+ <bean id="jobSendingMailTasksDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskGeneratorJob" />
+		<property name="targetMethod" value="sendingMailTasks" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="jobSendingMailTasksTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobSendingMailTasksDetail" />
+		<property name="cronExpression" value="0 0/10 * * * ?" />
+		<!-- value="0 0/5 * * * ?" job will run every 5 minute repeatedly.
+		value="0 0 23 * * ?" job will run every day 11pm once. -->
+	</bean> 
+
+	<bean id="jobFactory"
+		class="org.springframework.scheduling.quartz.SpringBeanJobFactory" />
+	 <bean id="schedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+		<property name="triggers">
+			<list>
+				<ref bean="jobGenerateTasksTrigger" />
+				<ref bean="jobSendingMailTasksTrigger" /> 
+			</list>
+		</property>
+		<property name="jobFactory" ref="jobFactory" />
+	</bean> 
+
+</beans>

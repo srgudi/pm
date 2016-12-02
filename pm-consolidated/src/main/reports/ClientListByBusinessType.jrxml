@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClientListByBusinessType" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     PARTY.`party_id`,
+     REL.`subject`,
+     REL.`object`,
+     ORG.`party_id`,
+     ORG.`name` as employee_name,
+     CODENAME.`id`,
+     CODENAME.`long_description`,
+     CODE1.`id`,
+     CODE1.`long_description`,
+     PARTY.`name` as client_name
+FROM
+     `party` PARTY INNER JOIN `party_relationship` REL ON PARTY.`party_id` = REL.`object`
+     INNER JOIN `organization` ORG ON REL.`subject` = ORG.`party_id`
+     INNER JOIN `code` CODENAME ON ORG.`form_of_business` = CODENAME.`id`
+     INNER JOIN `code` CODE1 ON ORG.`industry_type` = CODE1.`id`
+WHERE
+     ORG.ORGANIZATION_TYPE = 2]]>
+	</queryString>
+	<field name="party_id" class="java.math.BigInteger"/>
+	<field name="subject" class="java.math.BigInteger"/>
+	<field name="object" class="java.math.BigInteger"/>
+	<field name="employee_name" class="java.lang.String"/>
+	<field name="id" class="java.math.BigInteger"/>
+	<field name="long_description" class="java.lang.String"/>
+	<field name="client_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="129" y="8" width="228" height="21"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Client List By BusinessType]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="65" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="10" width="90" height="16"/>
+				<textElement/>
+				<text><![CDATA[Employee Name: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="37" width="90" height="17"/>
+				<textElement/>
+				<text><![CDATA[Form Of Business:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="115" y="37" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{long_description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="115" y="10" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{employee_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="4" width="66" height="22"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="4" width="100" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Client Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="2" width="100" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Industry Type]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="26" width="555" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="20" y="8" width="66" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{party_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="8" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{long_description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="197" y="8" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{client_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

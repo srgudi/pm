@@ -1,0 +1,194 @@
+#facebox .b {
+	background:url(../images/b.png);
+}
+#facebox .tl {
+	background-image:url(../images/borderTopLeft.png);
+	width:15px;
+	height:16px;
+	background-repeat:no-repeat;
+	background-position:left bottom;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .tr {
+	background-image:url(../images/borderTopRight.png);
+	width:16px;
+	height:16px;
+	background-repeat:no-repeat;
+	background-position:right bottom;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .tc {
+	background-image:url(../images/borderTopCenter.png);
+	background-repeat:repeat-x;	
+	background-position:left bottom;
+	height:16px;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .bl {
+	background:url(../images/borderBottomLeft.png);
+	width:15px;
+	height:23px;
+	background-position:top left;
+	background-repeat:no-repeat;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .br {
+	background:url(../images/borderBottomRight.png);
+	width:14px;
+	height:23px;
+	background-position:left top;
+	background-repeat:no-repeat;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .bc {
+	background-image:url(../images/borderBottomCenter.png);
+	height:23px;
+	background-repeat:repeat-x;
+	background-position:left top;	
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .lc {
+	background:url(../images/mlmiddle.png);
+	width:15px;
+	background-repeat:repeat-y;
+	background-position:bottom right;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .ml {
+	background:url(../images/borderMiddleLeft.png);
+	width:6px;
+	background-repeat:repeat-y;
+	background-position:top left;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox .mr {
+	background:url(../images/borderMiddleRight.png);
+	width:6px;
+	background-repeat:repeat-y;
+	background-position:top right;
+	_behavior:url(../js/iepngfix.htc);
+}
+#facebox {
+	position:absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	text-align: left;
+	background1:#FFFFFF url(../images/accordion.fade_bg.gif) repeat-x scroll left top;
+	border1:2px solid #D7D7D7;
+}
+#facebox .popup {
+	position: relative;
+}
+#facebox table {
+	border-collapse: collapse;
+}
+#facebox td {
+	border-bottom: 0;
+	padding: 0;
+}
+#facebox .body {
+	/* padding: 10px;*/
+  background: #fff;
+	width: 370px;
+}
+#facebox .loading {
+	text-align: center;
+}
+#facebox .image {
+	text-align: center;
+}
+#facebox img {
+	border: 0;
+	margin: 0;
+}
+#facebox .footer {
+	border-top: 1px solid #DDDDDD;
+	padding-top: 5px;
+	margin-top: 10px;
+	text-align: right;
+}
+#facebox .footer img {
+	vertical-align: middle;
+}
+#facebox .tl, #facebox .tr, #facebox .bl, #facebox .br {
+	overflow: hidden;
+	padding: 0;
+}
+#facebox_overlay {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height:100%;
+	width:100%;
+	background-color:#000000;
+}
+.facebox_hide {
+	z-index:-100;
+}
+.facebox_overlayBG {
+	background-color: #000;
+	z-index: 99;
+}
+* html #facebox_overlay { /* ie6 hack */
+	position: absolute;
+ height: expression(document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + 'px');
+}
+#modalCtr .modalHeader{
+	background-color:#dfdfdf;
+	padding:7px 10px;
+}
+.modalHeader .header{
+	color:#666666;
+	font-size:18px;
+	font-weight:bolder;
+	text-transform:lowercase;
+	border-bottom:0px;
+	padding:0px;
+	float:left;
+}
+#modalCtr .modalBody{
+	padding:13px 10px 28px;
+}
+#modalCtr .closeIcon{
+	float:right;
+	background: transparent url(../images/closeIcon.gif);
+	background-position:right;
+	background-repeat:no-repeat;	
+	height:17px;
+	font-size:13px;
+	padding:3px 20px 2px 0px;
+	color:#0D83DD;
+	text-decoration:none;
+}
+
+#modalCtr a.closeIcon:hover{
+	background-color:none;
+}
+
+
+#modalCtr .contentarea{
+	margin-bottom:15px;
+	padding-bottom:15px;
+}
+
+.mbody {
+	padding:20px 10px 9px;
+}
+.mbookmarkbody {
+	padding:18px 10px 27px;
+	_padding:18px 10px 20px;
+	_overflow:hidden;
+	
+}
+.padtb {
+	padding:10px 0px;
+}
+/* mycourse */
+
+.mbody_mycourse {
+	padding:18px 10px 35px;
+}
+.valigntop_facebox {
+	vertical-align:top;
+}

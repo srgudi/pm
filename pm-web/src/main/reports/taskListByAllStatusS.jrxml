@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="taskListByAllStatusS" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="24"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="start_date" class="java.sql.Timestamp">
+		<parameterDescription><![CDATA[start_date]]></parameterDescription>
+	</parameter>
+	<parameter name="end_date" class="java.sql.Timestamp">
+		<parameterDescription><![CDATA[end_date]]></parameterDescription>
+	</parameter>
+	<parameter name="addressLine" class="java.lang.String">
+		<parameterDescription><![CDATA[addressLine]]></parameterDescription>
+	</parameter>
+	<parameter name="city" class="java.lang.String">
+		<parameterDescription><![CDATA[city]]></parameterDescription>
+	</parameter>
+	<parameter name="postalCode" class="java.lang.String">
+		<parameterDescription><![CDATA[postalCode]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct party.`name` as PName,task.due_date as dueDate,task.id,
+  party.`party_id`, task.`filing_type`, staff.`name` as SName,
+client.`name` as CName,
+  task.`status` as TStatus,task.firm_id,partner.name as PRName,
+practice.name as PCName, task_status.status as newStatus , task.filing_title
+  from `task` as task, `party` as party,
+       party as staff, `party` as client,
+       party as partner,tax_application_practice_type as practice,
+       task_status
+  where task.firm_id = party.party_id
+  and task.staff_in_charge = staff.party_id
+  and task.client_staff_in_charge = client.party_id
+  and task.partner_in_charge = partner.party_id
+  and practice.id =task.partice_id
+  and task.status = task_status.id
+  and task.due_date
+  BETWEEN $P{start_date} AND $P{end_date}
+  Order By dueDate DESC]]>
+	</queryString>
+	<field name="sName" class="java.lang.String">
+		<fieldDescription><![CDATA[sName]]></fieldDescription>
+	</field>
+	<field name="CName" class="java.lang.String">
+		<fieldDescription><![CDATA[CName]]></fieldDescription>
+	</field>
+	<field name="PRName" class="java.lang.String">
+		<fieldDescription><![CDATA[PRName]]></fieldDescription>
+	</field>
+	<field name="PCName" class="java.lang.String">
+		<fieldDescription><![CDATA[PCName]]></fieldDescription>
+	</field>
+	<field name="newStatus" class="java.lang.String">
+		<fieldDescription><![CDATA[newStatus]]></fieldDescription>
+	</field>
+	<field name="PName" class="java.lang.String">
+		<fieldDescription><![CDATA[PName]]></fieldDescription>
+	</field>
+	<field name="dueDate" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[dueDate]]></fieldDescription>
+	</field>
+	<field name="filing_title" class="java.lang.String">
+		<fieldDescription><![CDATA[filing_title]]></fieldDescription>
+	</field>
+	<group name="Group1">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/15)]]></groupExpression>
+		<groupHeader>
+			<band height="83">
+				<staticText>
+					<reportElement mode="Opaque" x="10" y="12" width="43" height="15" backcolor="#FFFFFF"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Status :]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="49" y="33" width="333" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PName}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="55" y="10" width="333" height="15"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{newStatus}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="10" y="34" width="39" height="15" backcolor="#FFFFFF"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Firm :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="452" y="64" width="100" height="15"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[DueDate]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="10" y="64" width="72" height="15"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[ Task]]></text>
+				</staticText>
+				<line>
+					<reportElement x="10" y="80" width="26" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="359" y="80" width="26" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="171" y="64" width="87" height="15"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Staff]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="359" y="64" width="93" height="15"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Partner]]></text>
+				</staticText>
+				<line>
+					<reportElement x="452" y="80" width="26" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="171" y="80" width="23" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="258" y="80" width="30" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="82" y="64" width="89" height="15"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Filing Type]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="258" y="64" width="101" height="15"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[ClientStaff]]></text>
+				</staticText>
+				<line>
+					<reportElement x="82" y="80" width="30" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/5)]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="127" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="69" width="189" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{addressLine}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="11" y="99" width="189" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{postalCode}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="10" y="10" width="191" height="58"/>
+				<imageExpression><![CDATA["/logo/logo.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="11" y="84" width="189" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{city}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="323" y="10" width="175" height="29" isPrintWhenDetailOverflows="true" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Task List By Status]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="258" y="1" width="101" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="171" y="1" width="87" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="2" width="100" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dueDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="1" width="93" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="1" width="89" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{filing_title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="1" width="72" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PCName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="452" y="30" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="30" width="40" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
